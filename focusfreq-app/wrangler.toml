@@ -1,4 +1,4 @@
-name = "focusfreq-app"
+name = "focusfreq"
 main = ".open-next/worker.js"
 compatibility_date = "2024-12-30"
 compatibility_flags = [
@@ -13,7 +13,7 @@ binding = "ASSETS"
 [[services]]
 # Self-reference binding required by OpenNext for internal routing
 binding = "WORKER_SELF_REFERENCE"
-service = "focusfreq-app"
+service = "focusfreq"
 
 # Uncomment to enable ISR caching with R2 (not needed for free trial)
 # [[r2_buckets]]
