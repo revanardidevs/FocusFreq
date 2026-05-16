@@ -1,0 +1,80 @@
+/* src/components/timer/Timer.module.css */
+
+.timerBlock {
+  text-align: center;
+  padding: 10px 0 22px;
+}
+
+.timer {
+  font-size: clamp(76px, 10vw, 124px);
+  line-height: 0.92;
+  font-weight: 900;
+  letter-spacing: -0.075em;
+  font-variant-numeric: tabular-nums;
+  transition: all 0.3s ease;
+  color: var(--text-primary, #111827);
+}
+
+.timerRunning {
+  font-size: clamp(88px, 12vw, 148px);
+}
+
+.timerPaused {
+  color: var(--text-muted, #6f6a64);
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  color: var(--text-muted, #6f6a64);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 99px;
+  background: var(--color-focus, #f05a3c);
+  transition: background 0.3s ease;
+}
+
+.dotBreak {
+  background: var(--color-break, #2fae75);
+}
+
+.dotPaused {
+  background: var(--color-warning, #f59e0b);
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.progress {
+  height: 8px;
+  border-radius: 99px;
+  background: #f1ece6;
+  overflow: hidden;
+  margin: 2px 0 24px;
+  width: 100%;
+}
+
+.fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(135deg, var(--color-focus, #f05a3c), #ff735c);
+  transition: width 1s linear, background 0.3s ease;
+}
+
+.fillBreak {
+  background: linear-gradient(135deg, var(--color-break, #2fae75), #46c98d);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .5;
+  }
+}

@@ -1,87 +1,149 @@
 import { AudioMode, AudioSettings } from '@/types';
+import styles from './AudioSummary.module.css';
 
 interface AudioSummaryProps {
   settings: AudioSettings;
+  isPreviewing?: boolean;
   onOpenPanel: () => void;
+  onTogglePreview?: () => void;
+  onQuickMode?: (mode: AudioMode, noiseType?: string) => void;
+  /** If true, render as a compact pill instead of the full card */
+  compact?: boolean;
 }
 
-export default function AudioSummary({ settings, onOpenPanel }: AudioSummaryProps) {
-  const getSummaryText = () => {
-    const volumeText = `${Math.round(settings.volume * 100)}%`;
-    switch (settings.mode) {
-      case AudioMode.NONE:
-        return 'Audio: No Audio';
-      case AudioMode.TONE:
-        return `Audio: ${settings.tone.frequencyHz} Hz · ${
-          settings.tone.waveform.charAt(0).toUpperCase() + settings.tone.waveform.slice(1)
-        } · ${volumeText}`;
-      case AudioMode.BINAURAL:
-        return `Audio: Binaural ${settings.binaural.baseHz}/${
-          settings.binaural.baseHz + settings.binaural.beatHz
-        } Hz · ${volumeText}`;
-      case AudioMode.NOISE:
-        return `Audio: ${
-          settings.noise.type.charAt(0).toUpperCase() + settings.noise.type.slice(1)
-        } Noise · ${volumeText}`;
-    }
-  };
+const SoundIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+  </svg>
+);
 
+function getSoundTitle(settings: AudioSettings): string {
+  switch (settings.mode) {
+    case AudioMode.NOISE:
+      return `${settings.noise.type.charAt(0).toUpperCase() + settings.noise.type.slice(1)} Noise`;
+    case AudioMode.TONE:
+      return `${settings.tone.frequencyHz} Hz`;
+    case AudioMode.BINAURAL:
+      return 'Binaural';
+    default:
+      return 'No Audio';
+  }
+}
+
+function getSoundDesc(settings: AudioSettings): string {
+  const vol = `${Math.round(settings.volume * 100)}% volume`;
+  switch (settings.mode) {
+    case AudioMode.NOISE:
+      return `Steady background noise · ${vol}`;
+    case AudioMode.TONE:
+      return `${settings.tone.waveform.charAt(0).toUpperCase() + settings.tone.waveform.slice(1)} · ${vol}`;
+    case AudioMode.BINAURAL:
+      return `${settings.binaural.baseHz}/${settings.binaural.baseHz + settings.binaural.beatHz} Hz · ${vol}`;
+    default:
+      return 'Start silently or choose a focus sound';
+  }
+}
+
+function getModeLabel(settings: AudioSettings): string {
+  switch (settings.mode) {
+    case AudioMode.NOISE: return 'Noise';
+    case AudioMode.TONE: return 'Tone';
+    case AudioMode.BINAURAL: return 'Binaural';
+    default: return 'Off';
+  }
+}
+
+export default function AudioSummary({
+  settings,
+  isPreviewing,
+  onOpenPanel,
+  onTogglePreview,
+  onQuickMode,
+  compact,
+}: AudioSummaryProps) {
   const hasAudio = settings.mode !== AudioMode.NONE;
 
+  // Compact pill for running state
+  if (compact) {
+    return (
+      <div className={styles.runningSound}>
+        Sound: {getSoundTitle(settings)} · {Math.round(settings.volume * 100)}%
+      </div>
+    );
+  }
+
+  // Quick-select presets matching the mockup
+  const presets: { label: string; mode: AudioMode; noise?: string; tone?: number }[] = [
+    { label: 'Brown Noise', mode: AudioMode.NOISE, noise: 'brown' },
+    { label: 'Pink Noise', mode: AudioMode.NOISE, noise: 'pink' },
+    { label: '432 Hz', mode: AudioMode.TONE, tone: 432 },
+    { label: '40 Hz', mode: AudioMode.TONE, tone: 40 },
+    { label: 'No Audio', mode: AudioMode.NONE },
+  ];
+
+  function isPresetActive(p: typeof presets[number]): boolean {
+    if (p.mode !== settings.mode) return false;
+    if (p.mode === AudioMode.NOISE && p.noise !== settings.noise.type) return false;
+    if (p.mode === AudioMode.TONE && p.tone !== settings.tone.frequencyHz) return false;
+    return true;
+  }
+
   return (
-    <button
-      onClick={onOpenPanel}
-      className={`group flex items-center gap-3 text-sm transition-all px-4 py-3 rounded-[16px] border hover:shadow-soft w-full max-w-sm mx-auto ${
-        hasAudio ? 'bg-focus-soft border-focus-border' : 'bg-white border-surface-200'
-      }`}
-      style={
-        hasAudio
-          ? {
-              background: 'linear-gradient(135deg, #FFF7F5, #FFFFFF)',
-              borderColor: '#FFC9BA',
-            }
-          : {}
-      }
-    >
-      {/* Icon block */}
-      <div
-        className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-colors ${
-          hasAudio ? 'bg-[#FFC9BA]' : 'bg-surface-100'
-        }`}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className={`h-4 w-4 ${hasAudio ? 'text-focus' : 'text-text-muted'}`}
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"
-          />
-        </svg>
+    <div className={styles.soundCard}>
+      {/* Top label row */}
+      <div className={styles.soundTop}>
+        <div className={styles.soundLabel}>
+          <span className={styles.live} />
+          Focus Sound
+        </div>
+        <span className={styles.modeLabel}>{getModeLabel(settings)}</span>
       </div>
 
-      <span className={`text-[14px] truncate ${hasAudio ? 'text-focus' : 'text-text-primary group-hover:text-text-strong transition-colors'}`}>
-        {hasAudio ? (
-          <>
-            <span className="font-bold text-text-strong mr-1">Audio:</span>
-            <span className="font-medium text-focus">{getSummaryText().replace('Audio: ', '')}</span>
-          </>
-        ) : (
-          <span className="font-bold text-text-strong">Audio: No Audio</span>
-        )}
-      </span>
-      <div
-        className={`ml-auto font-medium text-[13px] px-3 py-1.5 rounded-[10px] transition-all ${
-          hasAudio ? 'bg-white border border-surface-200 text-text-strong hover:bg-surface-50' : 'bg-surface-100 border border-surface-200 text-text-muted hover:text-focus'
-        }`}
-      >
-        {hasAudio ? 'Change' : 'Choose'}
+      {/* Body: icon + info + actions */}
+      <div className={styles.soundBody}>
+        <div className={styles.soundMain}>
+          <div className={styles.soundIcon}>
+            <SoundIcon />
+          </div>
+          <div>
+            <p className={styles.soundTitle}>{getSoundTitle(settings)}</p>
+            <p className={styles.soundDesc}>{getSoundDesc(settings)}</p>
+          </div>
+        </div>
+        <div className={styles.soundActions}>
+          {onTogglePreview && hasAudio && (
+            <button className={styles.preview} onClick={onTogglePreview}>
+              {isPreviewing ? 'Playing...' : 'Preview'}
+            </button>
+          )}
+          <button className={styles.change} onClick={onOpenPanel}>
+            Change
+          </button>
+        </div>
       </div>
-    </button>
+
+      {/* Quick presets */}
+      {onQuickMode && (
+        <div className={styles.soundPresets}>
+          {presets.map((p) => (
+            <button
+              key={p.label}
+              className={`${styles.preset} ${isPresetActive(p) ? styles.active : ''}`}
+              onClick={() => {
+                if (p.mode === AudioMode.NOISE && p.noise) {
+                  onQuickMode(AudioMode.NOISE, p.noise);
+                } else if (p.mode === AudioMode.TONE && p.tone) {
+                  onQuickMode(AudioMode.TONE, String(p.tone));
+                } else {
+                  onQuickMode(AudioMode.NONE);
+                }
+              }}
+            >
+              {p.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }

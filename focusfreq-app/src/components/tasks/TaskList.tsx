@@ -3,6 +3,7 @@
 import type { Task, CreateTaskInput, UpdateTaskInput } from '@/types';
 import TaskItem from './TaskItem';
 import TaskInput from './TaskInput';
+import styles from './Tasks.module.css';
 
 interface TaskListProps {
   tasks: Task[];
@@ -29,17 +30,6 @@ export default function TaskList({
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-text-muted">
-          Tasks
-        </h2>
-        {tasks.length > 0 && (
-          <span className="text-xs text-text-muted">{tasks.length} active</span>
-        )}
-      </div>
-
-      <TaskInput onCreateTask={onCreateTask} />
-
       {tasks.length === 0 ? (
         <div className="rounded-xl border border-dashed border-surface-300 py-8 text-center">
           <p className="text-sm text-text-muted">No tasks yet</p>
@@ -48,7 +38,7 @@ export default function TaskList({
           </p>
         </div>
       ) : (
-        <div className="space-y-2">
+        <div className={styles.taskList}>
           {tasks.map((task) => (
             <TaskItem
               key={task.id}
@@ -63,10 +53,12 @@ export default function TaskList({
         </div>
       )}
 
+      <TaskInput onCreateTask={onCreateTask} />
+
       {selectedTaskId && (
         <button
           onClick={() => onSelectTask(null)}
-          className="w-full text-center text-xs text-text-muted hover:text-text-secondary"
+          className="w-full text-center text-xs text-text-muted hover:text-text-secondary mt-2 block"
         >
           Clear task selection (focus without task)
         </button>

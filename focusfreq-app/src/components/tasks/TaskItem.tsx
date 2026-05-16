@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import type { Task } from '@/types';
 import { formatMinutes } from '@/lib/utils';
+import styles from './Tasks.module.css';
 
 interface TaskItemProps {
   task: Task;
@@ -40,30 +41,29 @@ export default function TaskItem({
     }
   };
 
+  const isDone = task.status === 'completed';
+
   return (
     <div
-      className={`group flex items-center gap-3 rounded-[16px] px-4 py-3 transition-all duration-200 min-h-[48px] ${
-        isSelected
-          ? 'bg-focus-soft shadow-sm border border-focus-border'
-          : task.status === 'completed'
-          ? 'bg-surface-50 border border-surface-200 opacity-60'
-          : 'bg-white border border-surface-200 hover:bg-surface-50 hover:border-surface-300'
-      }`}
+      className={`${styles.taskRow} ${isSelected ? styles.active : ''} ${isDone ? styles.done : ''}`}
+      onClick={(e) => {
+        // Prevent selection if clicking inside inputs or action buttons
+        if ((e.target as HTMLElement).closest('input, [data-action]')) return;
+        onSelect(task.id);
+      }}
     >
-      {/* Select radio */}
+      {/* Circle = complete toggle */}
       <button
-        onClick={() => onSelect(task.id)}
-        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-all ${
-          isSelected
-            ? 'border-focus bg-focus'
-            : 'border-surface-300 hover:border-focus'
-        }`}
-        title="Select for focus session"
-      >
-        {isSelected && (
-          <div className="h-2 w-2 rounded-full bg-white" />
-        )}
-      </button>
+        onClick={(e) => {
+          e.stopPropagation();
+          if (!isDone) {
+            onComplete(task.id);
+          }
+        }}
+        data-action="complete"
+        className={styles.check}
+        title={isDone ? 'Completed' : 'Mark complete'}
+      />
 
       {/* Task content */}
       <div className="min-w-0 flex-1">
@@ -74,32 +74,37 @@ export default function TaskItem({
             onChange={(e) => setEditTitle(e.target.value)}
             onBlur={handleSave}
             onKeyDown={handleKeyDown}
-            className="w-full rounded-lg border border-focus/30 bg-white px-2 py-1 text-sm text-text-primary outline-none focus:border-focus focus:ring-1 focus:ring-focus/20"
+            className={styles.taskInputEdit}
             autoFocus
+            onClick={(e) => e.stopPropagation()}
           />
         ) : (
-          <button
-            onClick={() => setIsEditing(true)}
-            disabled={task.status === 'completed'}
-            className={`block w-full truncate text-left text-sm font-medium ${
-              task.status === 'completed' ? 'text-text-muted line-through' : 'text-text-primary'
-            }`}
+          <span
+            className={styles.taskTitle}
+            onDoubleClick={(e) => {
+              if (!isDone) {
+                e.stopPropagation();
+                setIsEditing(true);
+              }
+            }}
           >
             {task.title}
-          </button>
+          </span>
         )}
-        <div className="mt-1 flex items-center gap-1.5 text-xs text-text-muted">
-          <span>{task.completedSessions} sessions</span>
-          <span className="text-surface-300">•</span>
-          <span>{formatMinutes(task.totalFocusMinutes)} focused</span>
-        </div>
+        <span className={styles.taskMeta}>
+          {task.completedSessions} sessions • {formatMinutes(task.totalFocusMinutes)} focused
+        </span>
       </div>
 
       {/* Actions */}
       <div className="flex shrink-0 items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-        {task.status !== 'completed' && (
+        {!isDone && (
           <button
-            onClick={() => onComplete(task.id)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onComplete(task.id);
+            }}
+            data-action="complete"
             className="rounded-lg p-1.5 text-text-muted hover:bg-break-soft hover:text-break"
             title="Mark complete"
           >
@@ -109,7 +114,11 @@ export default function TaskItem({
           </button>
         )}
         <button
-          onClick={() => onDelete(task.id)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete(task.id);
+          }}
+          data-action="delete"
           className="rounded-lg p-1.5 text-text-muted hover:bg-danger/10 hover:text-danger"
           title="Delete"
         >
@@ -121,3 +130,4 @@ export default function TaskItem({
     </div>
   );
 }
+

@@ -2,6 +2,7 @@
 
 import { formatTimerDisplay } from '@/lib/utils';
 import { TimerState } from '@/types';
+import styles from './Timer.module.css';
 
 interface TimerProps {
   remainingSeconds: number;
@@ -12,13 +13,11 @@ interface TimerProps {
 
 export default function Timer({ remainingSeconds, progress, timerState, isBreak = false }: TimerProps) {
   const isActive = timerState === TimerState.RUNNING || timerState === TimerState.PAUSED;
-  const accentColor = isBreak ? 'bg-break' : 'bg-focus';
-  const dotColor = isBreak ? 'bg-break' : 'bg-focus';
 
   const getStatusText = () => {
     if (timerState === TimerState.PAUSED) return 'Paused';
     if (timerState === TimerState.IDLE) {
-      return isBreak ? 'Time for a break' : 'Ready to focus';
+      return isBreak ? 'Ready for a break' : 'Ready to focus';
     }
     if (timerState === TimerState.RUNNING) {
       return isBreak ? 'Take it easy' : 'Stay focused';
@@ -26,54 +25,33 @@ export default function Timer({ remainingSeconds, progress, timerState, isBreak 
     return '';
   };
 
-  return (
-    <div className="w-full flex flex-col items-center justify-center py-2">
-      {/* Timer display */}
-      <div className="flex flex-col items-center mb-4 mt-0">
-        <span
-          className={`font-sans font-[900] tracking-[-0.05em] leading-[0.9] transition-colors duration-300 ${
-            timerState === TimerState.PAUSED
-              ? 'animate-pulse text-text-muted'
-              : 'text-[#1F1A14]'
-          }`}
-          style={{ fontSize: 'clamp(80px, 16vw, 120px)' }}
-        >
-          {formatTimerDisplay(remainingSeconds)}
-        </span>
+  let timerClass = styles.timer;
+  if (isActive) timerClass += ` ${styles.timerRunning}`;
+  if (timerState === TimerState.PAUSED) timerClass += ` ${styles.timerPaused}`;
 
-        {/* Status with colored dot */}
-        <div className="mt-4 flex items-center gap-2">
-          <div className={`w-[14px] h-[14px] rounded-full flex items-center justify-center ${
-            timerState === TimerState.PAUSED 
-              ? 'bg-warning/20 animate-pulse' 
-              : isBreak 
-                ? 'bg-break-soft' 
-                : 'bg-focus-soft'
-          }`}>
-            <div className={`w-[6px] h-[6px] rounded-full ${
-              timerState === TimerState.PAUSED 
-                ? 'bg-warning' 
-                : isBreak 
-                  ? 'bg-break' 
-                  : 'bg-focus'
-            }`} />
-          </div>
-          <span className={`text-[15px] font-semibold ${
-            timerState === TimerState.PAUSED
-              ? 'uppercase tracking-widest text-warning text-xs'
-              : 'text-[#3D3830]'
-          }`}>
-            {getStatusText()}
-          </span>
+  let dotClass = styles.dot;
+  if (timerState === TimerState.PAUSED) dotClass += ` ${styles.dotPaused}`;
+  else if (isBreak) dotClass += ` ${styles.dotBreak}`;
+
+  let fillClass = styles.fill;
+  if (isBreak) fillClass += ` ${styles.fillBreak}`;
+
+  return (
+    <div className="w-full">
+      <div className={styles.timerBlock}>
+        <div className={timerClass}>
+          {formatTimerDisplay(remainingSeconds)}
+        </div>
+        <div className={styles.status}>
+          <span className={dotClass}></span>
+          <span id="status">{getStatusText()}</span>
         </div>
       </div>
-
-      {/* Slim horizontal progress bar / separator */}
-      <div className="w-full h-[1px] bg-surface-200 overflow-hidden relative mb-2">
-        <div
-          className={`absolute top-0 left-0 h-full transition-all duration-1000 ease-linear ${accentColor}`}
-          style={{ width: `${progress * 100}%` }}
-        />
+      <div className={styles.progress}>
+        <span 
+          className={fillClass} 
+          style={{ width: `${Math.max(0, Math.min(100, progress * 100))}%` }}
+        ></span>
       </div>
     </div>
   );

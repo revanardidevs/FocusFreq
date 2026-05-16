@@ -1,8 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
 import AdScript from '@/components/ads/AdScript';
 import { siteConfig } from '@/config/site';
 
@@ -62,9 +60,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <body className="flex min-h-screen flex-col">
-        <Header />
-        <main className="flex-1 pt-14">{children}</main>
-        <Footer />
+        {children}
         <AdScript />
       </body>
     </html>

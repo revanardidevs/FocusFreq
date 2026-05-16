@@ -1,0 +1,2083 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FocusFreq Latest Mockup</title>
+    <style>
+      :root {
+        --bg: #fafaf7;
+        --card: #fff;
+        --soft: #fffdf9;
+        --text: #111827;
+        --muted: #6f6a64;
+        --border: #eae6df;
+        --focus: #f05a3c;
+        --focusSoft: #fff0ea;
+        --focusBorder: #ffc9ba;
+        --break: #2fae75;
+        --breakSoft: #eaf8f1;
+        --breakBorder: #bfebd5;
+        --audio: #6c63ff;
+        --audioSoft: #f1eeff;
+        --audioBorder: #d8d2ff;
+        --shadow: 0 18px 50px rgba(31, 24, 16, 0.06);
+        --shadow2: 0 10px 28px rgba(31, 24, 16, 0.05);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family:
+          Inter,
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(
+            circle at top left,
+            rgba(240, 90, 60, 0.1),
+            transparent 28%
+          ),
+          radial-gradient(
+            circle at bottom right,
+            rgba(108, 99, 255, 0.08),
+            transparent 28%
+          ),
+          var(--bg);
+      }
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      .shell {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 236px 1fr;
+      }
+      .sidebar {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        padding: 28px 20px;
+        border-right: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.78);
+        backdrop-filter: blur(18px);
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 20px;
+        font-weight: 850;
+        letter-spacing: -0.04em;
+      }
+      .logo {
+        width: 42px;
+        height: 42px;
+      }
+      .logo svg {
+        width: 100%;
+        height: 100%;
+      }
+      .nav {
+        display: grid;
+        gap: 8px;
+      }
+      .nav button {
+        border: 0;
+        background: transparent;
+        color: var(--muted);
+        text-align: left;
+        padding: 12px 14px;
+        border-radius: 14px;
+        font-weight: 750;
+      }
+      .nav .active {
+        background: var(--focusSoft);
+        color: var(--focus);
+        outline: 1px solid var(--focusBorder);
+      }
+      .sidebar-card {
+        margin-top: auto;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 22px;
+        padding: 18px;
+        box-shadow: var(--shadow2);
+      }
+      .eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-size: 11px;
+        font-weight: 900;
+        color: #8a817a;
+      }
+      .sidebar-card p {
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.55;
+      }
+      .mini-brand {
+        display: none;
+        position: fixed;
+        top: 22px;
+        left: 24px;
+        z-index: 20;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.78);
+        backdrop-filter: blur(18px);
+        padding: 8px 12px 8px 8px;
+        box-shadow: var(--shadow2);
+        font-size: 14px;
+        font-weight: 850;
+      }
+      .mini-brand .logo {
+        width: 34px;
+        height: 34px;
+      }
+      .mobile-top {
+        display: none;
+      }
+      .main {
+        padding: 34px;
+      }
+      .workspace {
+        width: min(1200px, 100%);
+        margin: auto;
+        display: grid;
+        grid-template-columns: minmax(520px, 700px) 330px;
+        gap: 28px;
+        align-items: start;
+      }
+      .timer-card {
+        position: relative;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid var(--border);
+        border-radius: 32px;
+        box-shadow: var(--shadow);
+        padding: 32px;
+      }
+      .top-actions {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        display: flex;
+        gap: 8px;
+      }
+      .icon {
+        width: 42px;
+        height: 42px;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        background: #fff;
+        color: var(--muted);
+        font-weight: 900;
+      }
+      .task-head {
+        padding-right: 96px;
+        margin-bottom: 22px;
+      }
+      .task-title {
+        margin: 5px 0 0;
+        font-size: 22px;
+        font-weight: 850;
+        letter-spacing: -0.045em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .task-input {
+        width: 100%;
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        background: var(--soft);
+        padding: 14px 16px;
+        font-size: 16px;
+        outline: none;
+      }
+      .mode-tabs {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+        padding: 5px;
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        background: var(--soft);
+        margin-bottom: 28px;
+      }
+      .mode-tabs button {
+        border: 0;
+        background: transparent;
+        color: var(--muted);
+        min-height: 48px;
+        border-radius: 14px;
+        font-weight: 850;
+      }
+      .mode-tabs .active.focus {
+        background: var(--focusSoft);
+        color: var(--focus);
+        outline: 1px solid var(--focusBorder);
+      }
+      .mode-tabs .active.break {
+        background: var(--breakSoft);
+        color: var(--break);
+        outline: 1px solid var(--breakBorder);
+      }
+      .timer-block {
+        text-align: center;
+        padding: 10px 0 22px;
+      }
+      .timer {
+        font-size: clamp(76px, 10vw, 124px);
+        line-height: 0.92;
+        font-weight: 900;
+        letter-spacing: -0.075em;
+        font-variant-numeric: tabular-nums;
+      }
+      .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 18px;
+        color: var(--muted);
+        font-size: 15px;
+        font-weight: 700;
+      }
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 99px;
+        background: var(--focus);
+      }
+      .progress {
+        height: 8px;
+        border-radius: 99px;
+        background: #f1ece6;
+        overflow: hidden;
+        margin: 2px 0 24px;
+      }
+      .fill {
+        height: 100%;
+        width: 0;
+        background: linear-gradient(135deg, var(--focus), #ff735c);
+      }
+      .sound-card {
+        margin: 18px 0;
+        border: 1px solid var(--audioBorder);
+        border-radius: 24px;
+        background:
+          radial-gradient(
+            circle at top left,
+            rgba(108, 99, 255, 0.14),
+            transparent 34%
+          ),
+          linear-gradient(135deg, var(--audioSoft), #fff 72%);
+        padding: 16px;
+        box-shadow: 0 10px 28px rgba(108, 99, 255, 0.08);
+      }
+      .sound-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .sound-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--audio);
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+      .live {
+        width: 7px;
+        height: 7px;
+        border-radius: 99px;
+        background: var(--audio);
+        box-shadow: 0 0 0 5px rgba(108, 99, 255, 0.12);
+      }
+      .sound-body {
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        align-items: center;
+      }
+      .sound-main {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        min-width: 0;
+      }
+      .sound-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 16px;
+        display: grid;
+        place-items: center;
+        color: #fff;
+        background: linear-gradient(135deg, var(--audio), #847cff);
+        font-size: 20px;
+        font-weight: 900;
+      }
+      .sound-title {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 900;
+      }
+      .sound-desc {
+        margin: 3px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .sound-actions {
+        display: flex;
+        gap: 8px;
+      }
+      .sbtn {
+        border: 0;
+        border-radius: 13px;
+        padding: 10px 12px;
+        font-size: 13px;
+        font-weight: 900;
+      }
+      .preview {
+        color: var(--audio);
+        background: #fff;
+        border: 1px solid rgba(108, 99, 255, 0.14);
+      }
+      .change {
+        color: #fff;
+        background: linear-gradient(135deg, var(--audio), #847cff);
+      }
+      .sound-presets {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 14px;
+        padding-top: 14px;
+        border-top: 1px solid rgba(108, 99, 255, 0.14);
+      }
+      .preset {
+        border: 1px solid var(--audioBorder);
+        background: #fff;
+        color: var(--audio);
+        border-radius: 999px;
+        padding: 8px 10px;
+        font-size: 12px;
+        font-weight: 850;
+      }
+      .preset.active {
+        background: var(--audio);
+        color: #fff;
+      }
+      .running-sound {
+        display: none;
+        margin: 12px auto 18px;
+        width: fit-content;
+        border: 1px solid var(--audioBorder);
+        background: var(--audioSoft);
+        color: var(--audio);
+        border-radius: 999px;
+        padding: 10px 14px;
+        font-size: 13px;
+        font-weight: 850;
+      }
+      .controls {
+        position: sticky;
+        bottom: 18px;
+        z-index: 8;
+        margin-top: 10px;
+        padding-top: 14px;
+        background: linear-gradient(
+          to bottom,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 0.94) 42%,
+          rgba(255, 255, 255, 0.94)
+        );
+        border-radius: 0 0 22px 22px;
+      }
+      .start,
+      .pause,
+      .end {
+        width: 100%;
+        min-height: 58px;
+        border-radius: 18px;
+        border: 0;
+        font-size: 17px;
+        font-weight: 900;
+      }
+      .start {
+        color: #fff;
+        background: linear-gradient(135deg, var(--focus), #ff735c);
+        box-shadow: 0 16px 32px rgba(240, 90, 60, 0.22);
+      }
+      .start.break {
+        background: linear-gradient(135deg, var(--break), #46c98d);
+      }
+      .run-controls {
+        display: none;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .pause {
+        color: var(--focus);
+        background: var(--focusSoft);
+        border: 1px solid var(--focusBorder);
+      }
+      .end {
+        color: #b42318;
+        background: #fff7f6;
+        border: 1px solid #ffd3ce;
+      }
+      .side {
+        display: grid;
+        gap: 18px;
+      }
+      .card {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        box-shadow: var(--shadow2);
+        padding: 20px;
+      }
+      .card h3 {
+        margin: 4px 0 0;
+        font-size: 20px;
+        font-weight: 850;
+        letter-spacing: -0.045em;
+      }
+      .today {
+        background: linear-gradient(135deg, #fff, #fff8f0);
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 16px;
+      }
+      .stat {
+        padding: 13px;
+        border-radius: 18px;
+        background: var(--soft);
+        border: 1px solid var(--border);
+      }
+      .stat strong {
+        display: block;
+        font-size: 21px;
+        font-weight: 900;
+      }
+      .stat span {
+        display: block;
+        margin-top: 4px;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 750;
+      }
+      .task-list {
+        margin-top: 16px;
+        display: grid;
+        gap: 10px;
+        max-height: 282px;
+        overflow: auto;
+        padding-right: 2px;
+      }
+      .task-row {
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        background: var(--soft);
+        display: flex;
+        gap: 10px;
+        padding: 12px;
+      }
+      .task-row.active {
+        border-color: var(--focusBorder);
+        background: var(--focusSoft);
+      }
+      .task-row.done {
+        opacity: 0.72;
+      }
+      .check {
+        width: 18px;
+        height: 18px;
+        margin-top: 2px;
+        border-radius: 99px;
+        border: 2px solid var(--focusBorder);
+        background: #fff;
+        flex: 0 0 auto;
+      }
+      .done .check {
+        border-color: var(--break);
+        background: var(--break);
+        box-shadow: inset 0 0 0 4px #fff;
+      }
+      .task-row strong {
+        display: block;
+        font-size: 14px;
+      }
+      .done strong {
+        color: #8a817a;
+        text-decoration: line-through;
+      }
+      .task-row span {
+        display: block;
+        margin-top: 4px;
+        color: #8a817a;
+        font-size: 12px;
+        font-weight: 650;
+      }
+      .add-task-area {
+        position: static;
+        margin-top: 12px;
+        padding-top: 0;
+        background: transparent;
+      }
+      .add-small {
+        width: 100%;
+        border-radius: 18px;
+        border: 1px dashed var(--focusBorder);
+        background: var(--focusSoft);
+        color: var(--focus);
+        padding: 14px 16px;
+        font-size: 15px;
+        font-weight: 900;
+      }
+      .add-form {
+        display: none;
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .add-form.open {
+        display: grid;
+      }
+      .add-input {
+        width: 100%;
+        min-height: 46px;
+        border: 1px solid var(--focusBorder);
+        border-radius: 15px;
+        background: #fff;
+        color: var(--text);
+        padding: 10px 12px;
+        font-size: 16px;
+      }
+      .add-actions {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 8px;
+      }
+      .save {
+        min-height: 42px;
+        border: 0;
+        border-radius: 14px;
+        background: linear-gradient(135deg, var(--focus), #ff735c);
+        color: #fff;
+        font-weight: 900;
+      }
+      .cancel {
+        min-height: 42px;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        background: #fff;
+        color: var(--muted);
+        font-weight: 850;
+        padding: 0 12px;
+      }
+      .break-card {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, var(--breakSoft), #fff);
+        border-color: var(--breakBorder);
+      }
+      .break-card p {
+        margin: 10px 0 18px;
+        color: var(--muted);
+        line-height: 1.55;
+        font-size: 14px;
+      }
+      .break-card button {
+        border: 0;
+        border-radius: 14px;
+        background: var(--break);
+        color: #fff;
+        padding: 12px 14px;
+        font-weight: 850;
+      }
+      .leaf {
+        position: absolute;
+        right: 18px;
+        bottom: 10px;
+        font-size: 58px;
+        opacity: 0.16;
+        transform: rotate(-12deg);
+      }
+      .mobile-support {
+        width: min(700px, 100%);
+        margin: 18px auto 0;
+        display: none;
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+      .info {
+        width: min(920px, 100%);
+        margin: 72px auto 0;
+        padding-bottom: 72px;
+      }
+      .info-kicker {
+        text-align: center;
+        color: var(--focus);
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        font-size: 12px;
+        font-weight: 900;
+      }
+      .info h1 {
+        margin: 12px auto 16px;
+        max-width: 820px;
+        text-align: center;
+        font-size: clamp(32px, 4vw, 48px);
+        line-height: 1.08;
+        letter-spacing: -0.065em;
+      }
+      .lead {
+        margin: 0 auto 34px;
+        max-width: 720px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 17px;
+        line-height: 1.75;
+      }
+      .article {
+        margin-top: 18px;
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid var(--border);
+        border-radius: 28px;
+        box-shadow: var(--shadow2);
+        padding: 30px;
+      }
+      .article h2 {
+        margin: 0 0 12px;
+        font-size: 27px;
+        letter-spacing: -0.045em;
+      }
+      .article p,
+      .article li {
+        color: var(--muted);
+        line-height: 1.75;
+        font-size: 16px;
+      }
+      .features {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+      }
+      .feature {
+        border: 1px solid var(--border);
+        background: var(--soft);
+        border-radius: 18px;
+        padding: 16px;
+      }
+      .feature strong {
+        display: block;
+        margin-bottom: 5px;
+      }
+      .backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 22px;
+        background: rgba(32, 33, 36, 0.22);
+        backdrop-filter: blur(10px);
+      }
+      .backdrop.open {
+        display: flex;
+      }
+      .modal {
+        width: min(720px, 100%);
+        max-height: min(760px, calc(100vh - 44px));
+        overflow: auto;
+        border: 1px solid var(--border);
+        border-radius: 30px;
+        background: #fff;
+        box-shadow: 0 28px 80px rgba(31, 24, 16, 0.18);
+        padding: 24px;
+      }
+      .modal-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+      .modal-head h2 {
+        margin: 5px 0 0;
+        font-size: 28px;
+        letter-spacing: -0.055em;
+      }
+      .modal-head p {
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.55;
+      }
+      .close {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        background: #fff;
+        color: var(--muted);
+        font-weight: 900;
+      }
+      .section {
+        border: 1px solid var(--border);
+        border-radius: 22px;
+        background: var(--soft);
+        padding: 16px;
+        margin-top: 14px;
+      }
+      .section-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+      }
+      .section-title h3 {
+        margin: 0;
+        font-size: 16px;
+      }
+      .row {
+        display: grid;
+        grid-template-columns: 1fr 112px;
+        gap: 14px;
+        align-items: center;
+        padding: 13px 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .row:last-child {
+        border-bottom: 0;
+      }
+      .row label {
+        font-size: 14px;
+        font-weight: 850;
+      }
+      .row small {
+        display: block;
+        margin-top: 4px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .num,
+      .field input,
+      .field select {
+        width: 100%;
+        min-height: 46px;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        background: #fff;
+        padding: 10px 12px;
+        font-size: 16px;
+      }
+      .num {
+        text-align: center;
+      }
+      .toggle-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .toggle-row:last-child {
+        border-bottom: 0;
+      }
+      .toggle-row strong {
+        font-size: 14px;
+      }
+      .toggle-row span {
+        display: block;
+        margin-top: 4px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .toggle {
+        position: relative;
+        width: 48px;
+        height: 28px;
+        border: 0;
+        border-radius: 99px;
+        background: #e7e1da;
+      }
+      .toggle:after {
+        content: "";
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        width: 20px;
+        height: 20px;
+        border-radius: 99px;
+        background: #fff;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+      }
+      .toggle.on {
+        background: var(--focus);
+      }
+      .toggle.on:after {
+        transform: translateX(20px);
+      }
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 18px;
+      }
+      .save-settings,
+      .reset,
+      .apply {
+        min-height: 48px;
+        border-radius: 15px;
+        font-weight: 900;
+        padding: 0 18px;
+      }
+      .save-settings,
+      .apply {
+        border: 0;
+        background: linear-gradient(135deg, var(--focus), #ff735c);
+        color: #fff;
+      }
+      .reset {
+        border: 1px solid var(--border);
+        background: #fff;
+        color: var(--muted);
+      }
+      .mode-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+      }
+      .mode-choice {
+        min-height: 74px;
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        background: #fff;
+        color: var(--muted);
+        padding: 12px;
+        text-align: left;
+      }
+      .mode-choice strong {
+        display: block;
+        color: var(--text);
+        font-size: 14px;
+      }
+      .mode-choice span {
+        display: block;
+        margin-top: 4px;
+        color: #8a817a;
+        font-size: 12px;
+      }
+      .mode-choice.active {
+        border-color: var(--audioBorder);
+        background: var(--audioSoft);
+        color: var(--audio);
+      }
+      .field-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+      .field {
+        display: grid;
+        gap: 7px;
+      }
+      .field label {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 850;
+      }
+      .range-row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 12px;
+        align-items: center;
+      }
+      .range-row input {
+        accent-color: var(--audio);
+      }
+      .pill {
+        min-width: 58px;
+        border-radius: 99px;
+        background: var(--audioSoft);
+        color: var(--audio);
+        padding: 8px 10px;
+        text-align: center;
+        font-size: 13px;
+        font-weight: 900;
+      }
+      .preset-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .drawer-preset {
+        border: 1px solid var(--audioBorder);
+        background: #fff;
+        color: var(--audio);
+        border-radius: 99px;
+        padding: 9px 11px;
+        font-size: 12px;
+        font-weight: 850;
+      }
+      .drawer-preset.active {
+        background: var(--audio);
+        color: #fff;
+      }
+      .note {
+        margin-top: 12px;
+        border: 1px solid #ffe0b2;
+        border-radius: 16px;
+        background: #fff9ed;
+        color: #9a5b00;
+        padding: 12px;
+        font-size: 13px;
+        line-height: 1.45;
+        font-weight: 650;
+      }
+      body.is-running .shell {
+        grid-template-columns: 1fr;
+      }
+      body.is-running .mini-brand {
+        display: flex;
+      }
+      body.is-running .sidebar,
+      body.is-running .mobile-top {
+        display: none;
+      }
+      body.is-running .main {
+        padding-top: 42px;
+      }
+      body.is-running .workspace {
+        grid-template-columns: minmax(520px, 760px);
+        justify-content: center;
+      }
+      body.is-running .side,
+      body.is-running .mobile-support,
+      body.is-running .info,
+      body.is-running .sidebar-card,
+      body.is-running .sound-actions,
+      body.is-running .sound-presets,
+      body.is-running .sound-top {
+        display: none;
+      }
+      body.is-running .timer-card {
+        min-height: 72vh;
+        padding: 48px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      body.is-running .timer {
+        font-size: clamp(88px, 12vw, 148px);
+      }
+      body.is-running .start {
+        display: none;
+      }
+      body.is-running .run-controls {
+        display: grid;
+      }
+      body.is-running .mode-tabs,
+      body.is-running .task-input,
+      body.is-running .sound-card {
+        display: none;
+      }
+      body.is-running .running-sound {
+        display: block;
+      }
+      body.is-paused .timer {
+        color: var(--muted);
+      }
+      @media (max-width: 1120px) {
+        .shell {
+          grid-template-columns: 1fr;
+        }
+        .sidebar {
+          display: none;
+        }
+        .mobile-top {
+          display: flex;
+          position: sticky;
+          top: 0;
+          z-index: 10;
+          align-items: center;
+          justify-content: space-between;
+          padding: 14px 18px;
+          border-bottom: 1px solid var(--border);
+          background: rgba(255, 255, 255, 0.84);
+          backdrop-filter: blur(16px);
+        }
+        .workspace {
+          grid-template-columns: 1fr;
+          max-width: 700px;
+        }
+        .side {
+          display: none;
+        }
+        .mobile-support {
+          display: grid;
+        }
+      }
+      @media (max-width: 640px) {
+        .main {
+          padding: 18px 14px 42px;
+        }
+        .timer-card {
+          padding: 20px;
+          border-radius: 24px;
+        }
+        .top-actions {
+          top: 14px;
+          right: 14px;
+        }
+        .task-head {
+          padding-right: 88px;
+        }
+        .mode-tab {
+          font-size: 12px;
+          min-height: 42px;
+        }
+        .timer {
+          font-size: 68px;
+        }
+        .sound-presets {
+          display: none;
+        }
+        .controls {
+          bottom: 12px;
+        }
+        .start,
+        .pause,
+        .end {
+          min-height: 54px;
+        }
+        .info h1,
+        .lead {
+          text-align: left;
+        }
+        .features {
+          grid-template-columns: 1fr;
+        }
+        .backdrop {
+          padding: 10px;
+          align-items: flex-end;
+        }
+        .modal {
+          max-height: 92vh;
+          border-radius: 26px 26px 0 0;
+          padding: 18px;
+        }
+        .row {
+          grid-template-columns: 1fr 92px;
+        }
+        .footer {
+          flex-direction: column;
+        }
+        .mode-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .field-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .nav button {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+      }
+
+      .nav button .nav-icon {
+        width: 19px;
+        height: 19px;
+        flex: 0 0 19px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .nav button span {
+        line-height: 1;
+      }
+
+      .nav button.active {
+        font-weight: 900;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mini-brand">
+      <div class="logo">
+        <svg viewBox="0 0 64 64">
+          <path
+            d="M32 10v44M22 18v28M42 18v28M13 26v12M51 26v12M5 31v2M59 31v2"
+            stroke="#F05A3C"
+            stroke-width="5"
+            stroke-linecap="round"
+          />
+        </svg>
+      </div>
+      <span>FocusFreq</span>
+    </div>
+
+    <div class="backdrop" id="timerModal">
+      <div class="modal">
+        <div class="modal-head">
+          <div>
+            <div class="eyebrow">Timer Settings</div>
+            <h2>Customize your Pomodoro cycle.</h2>
+            <p>Set your focus, break, and long break durations.</p>
+          </div>
+          <button class="close" id="closeTimer">✕</button>
+        </div>
+        <section class="section">
+          <div class="section-title"><h3>Time minutes</h3></div>
+          <div class="row">
+            <div>
+              <label>Pomodoro</label><small>Main focus session length.</small>
+            </div>
+            <input class="num" id="pomodoro" type="number" value="25" />
+          </div>
+          <div class="row">
+            <div>
+              <label>Short Break</label
+              ><small>Short recovery after focus.</small>
+            </div>
+            <input class="num" id="shortBreak" type="number" value="5" />
+          </div>
+          <div class="row">
+            <div>
+              <label>Long Break</label
+              ><small>Longer recovery after several sessions.</small>
+            </div>
+            <input class="num" id="longBreak" type="number" value="15" />
+          </div>
+          <div class="row">
+            <div>
+              <label>Long Break interval</label
+              ><small>After this many Pomodoros.</small>
+            </div>
+            <input class="num" id="interval" type="number" value="4" />
+          </div>
+        </section>
+        <section class="section">
+          <div class="section-title"><h3>Behavior</h3></div>
+          <div class="toggle-row">
+            <div>
+              <strong>Auto Start Breaks</strong
+              ><span>Use a safe countdown after focus.</span>
+            </div>
+            <button class="toggle" id="autoBreak"></button>
+          </div>
+          <div class="toggle-row">
+            <div>
+              <strong>Auto Start Pomodoros</strong
+              ><span>Use a safe countdown after break.</span>
+            </div>
+            <button class="toggle" id="autoPomodoro"></button>
+          </div>
+          <div class="toggle-row">
+            <div>
+              <strong>Check to Bottom</strong
+              ><span>Move completed tasks lower.</span>
+            </div>
+            <button class="toggle on" id="checkBottom"></button>
+          </div>
+        </section>
+        <div class="footer">
+          <button class="reset" id="resetTimer">Reset defaults</button
+          ><button class="save-settings" id="saveTimer">Save settings</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="backdrop" id="soundModal">
+      <div class="modal">
+        <div class="modal-head">
+          <div>
+            <div class="eyebrow">Focus Sound Settings</div>
+            <h2>Choose a sound that stays in the background.</h2>
+            <p>
+              Use comfortable volume. These sound tools are for productivity and
+              relaxation, not medical treatment.
+            </p>
+          </div>
+          <button class="close" id="closeSound">✕</button>
+        </div>
+        <section class="section">
+          <div class="section-title">
+            <h3>Sound mode</h3>
+            <span class="pill" id="modePill">Noise</span>
+          </div>
+          <div class="mode-grid">
+            <button class="mode-choice active" data-mode="noise">
+              <strong>Noise</strong><span>Brown, pink, white</span>
+            </button>
+            <button class="mode-choice" data-mode="tone">
+              <strong>Tone</strong><span>Custom Hz</span>
+            </button>
+            <button class="mode-choice" data-mode="binaural">
+              <strong>Binaural</strong><span>Base + beat</span>
+            </button>
+            <button class="mode-choice" data-mode="none">
+              <strong>No Audio</strong><span>Start silently</span>
+            </button>
+          </div>
+        </section>
+        <section class="section" id="noiseSec">
+          <div class="section-title"><h3>Noise preset</h3></div>
+          <div class="preset-grid">
+            <button class="drawer-preset active" data-noise="brown">
+              Brown Noise</button
+            ><button class="drawer-preset" data-noise="pink">Pink Noise</button
+            ><button class="drawer-preset" data-noise="white">
+              White Noise
+            </button>
+          </div>
+        </section>
+        <section class="section" id="toneSec" hidden>
+          <div class="section-title"><h3>Tone frequency</h3></div>
+          <div class="field-grid">
+            <div class="field">
+              <label>Frequency Hz</label
+              ><input id="freq" type="number" value="432" />
+            </div>
+            <div class="field">
+              <label>Waveform</label
+              ><select id="wave">
+                <option>sine</option>
+                <option>square</option>
+                <option>triangle</option>
+                <option>sawtooth</option>
+              </select>
+            </div>
+          </div>
+          <div class="preset-grid" style="margin-top: 12px">
+            <button class="drawer-preset" data-tone="40">40 Hz</button
+            ><button class="drawer-preset active" data-tone="432">432 Hz</button
+            ><button class="drawer-preset" data-tone="528">528 Hz</button
+            ><button class="drawer-preset" data-tone="1000">1000 Hz</button>
+          </div>
+          <div class="note" id="freqWarn" hidden>
+            High frequencies may be uncomfortable. Use low volume.
+          </div>
+        </section>
+        <section class="section" id="binSec" hidden>
+          <div class="section-title"><h3>Binaural settings</h3></div>
+          <div class="field-grid">
+            <div class="field">
+              <label>Base Hz</label
+              ><input id="baseHz" type="number" value="200" />
+            </div>
+            <div class="field">
+              <label>Beat Hz</label
+              ><input id="beatHz" type="number" value="10" />
+            </div>
+          </div>
+          <div class="note">Binaural mode works best with headphones.</div>
+        </section>
+        <section class="section">
+          <div class="section-title">
+            <h3>Volume</h3>
+            <span class="pill" id="volPill">20%</span>
+          </div>
+          <div class="range-row">
+            <input id="volume" type="range" min="0" max="100" value="20" /><span
+              class="pill"
+              id="volPill2"
+              >20%</span
+            >
+          </div>
+        </section>
+        <div class="footer">
+          <button class="sbtn preview" id="drawerPreview">Preview Sound</button
+          ><button class="apply" id="applySound">Apply Focus Sound</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="logo">
+            <svg viewBox="0 0 64 64">
+              <path
+                d="M32 10v44M22 18v28M42 18v28M13 26v12M51 26v12M5 31v2M59 31v2"
+                stroke="#F05A3C"
+                stroke-width="5"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+          <span>FocusFreq</span>
+        </div>
+        <nav class="nav">
+          <button class="active" data-nav="focus">
+            <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="7.5"></circle>
+              <circle cx="12" cy="12" r="2.5"></circle></svg
+            ><span>Focus</span></button
+          ><button data-nav="history">
+            <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="8"></circle>
+              <path d="M12 7v5l3 2"></path></svg
+            ><span>History</span></button
+          ><button data-nav="leaderboard">
+            <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M8 20h8"></path>
+              <path d="M12 16v4"></path>
+              <path d="M7 4h10v3a5 5 0 0 1-10 0V4Z"></path>
+              <path d="M7 7H4a3 3 0 0 0 3 3"></path>
+              <path d="M17 7h3a3 3 0 0 1-3 3"></path></svg
+            ><span>Leaderboard</span>
+          </button>
+        </nav>
+        <div class="sidebar-card">
+          <div class="eyebrow">Ready to focus</div>
+          <p>
+            Choose one task, start the timer, and let the sound stay in the
+            background.
+          </p>
+        </div>
+      </aside>
+      <div>
+        <header class="mobile-top">
+          <div class="brand">
+            <div class="logo">
+              <svg viewBox="0 0 64 64">
+                <path
+                  d="M32 10v44M22 18v28M42 18v28M13 26v12M51 26v12M5 31v2M59 31v2"
+                  stroke="#F05A3C"
+                  stroke-width="5"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </div>
+            <span>FocusFreq</span>
+          </div>
+          <button class="icon">☰</button>
+        </header>
+        <main class="main">
+          <section class="workspace">
+            <div class="timer-card">
+              <div class="top-actions">
+                <button class="icon" id="clearTask">✕</button
+                ><button class="icon" id="openTimer">⚙</button>
+              </div>
+              <div class="task-head">
+                <div class="eyebrow" id="taskLabel">
+                  What will you focus on?
+                </div>
+                <input
+                  id="taskInput"
+                  class="task-input"
+                  placeholder="e.g. Write landing page copy"
+                />
+                <div id="taskTitle" class="task-title" hidden>Free Focus</div>
+              </div>
+              <div class="mode-tabs">
+                <button class="mode-tab active focus" data-mode="focus">
+                  Focus</button
+                ><button class="mode-tab" data-mode="short">Short Break</button
+                ><button class="mode-tab" data-mode="long">Long Break</button>
+              </div>
+              <div class="timer-block">
+                <div id="timer" class="timer">25:00</div>
+                <div class="status">
+                  <span id="dot" class="dot"></span
+                  ><span id="status">Ready to focus</span>
+                </div>
+              </div>
+              <div class="progress"><span id="fill" class="fill"></span></div>
+              <div class="sound-card" id="soundCard">
+                <div class="sound-top">
+                  <div class="sound-label">
+                    <span class="live"></span>Focus Sound
+                  </div>
+                  <div class="eyebrow" id="soundMode">Noise</div>
+                </div>
+                <div class="sound-body">
+                  <div class="sound-main">
+                    <div id="soundIcon" class="sound-icon">≈</div>
+                    <div>
+                      <p id="soundTitle" class="sound-title">Brown Noise</p>
+                      <p id="soundDesc" class="sound-desc">
+                        Steady background noise · 20% volume
+                      </p>
+                    </div>
+                  </div>
+                  <div class="sound-actions">
+                    <button class="sbtn preview" id="previewBtn">Preview</button
+                    ><button class="sbtn change" id="changeSound">
+                      Change
+                    </button>
+                  </div>
+                </div>
+                <div class="sound-presets">
+                  <button class="preset active" data-sound="brown">
+                    Brown Noise</button
+                  ><button class="preset" data-sound="pink">Pink Noise</button
+                  ><button class="preset" data-sound="432">432 Hz</button
+                  ><button class="preset" data-sound="40">40 Hz</button
+                  ><button class="preset" data-sound="none">No Audio</button>
+                </div>
+              </div>
+              <div id="runningSound" class="running-sound">
+                Sound: Brown Noise · 20%
+              </div>
+              <div class="controls">
+                <button id="start" class="start">▶ Start Focusing</button>
+                <div class="run-controls">
+                  <button id="pause" class="pause">Pause</button
+                  ><button id="end" class="end">End Session</button>
+                </div>
+              </div>
+            </div>
+            <aside class="side">
+              <section class="card today">
+                <div class="eyebrow">Today</div>
+                <h3>Your focus progress</h3>
+                <div class="stats">
+                  <div class="stat">
+                    <strong id="focusStat">0m</strong><span>Focus time</span>
+                  </div>
+                  <div class="stat">
+                    <strong id="sessionStat">0</strong><span>Sessions</span>
+                  </div>
+                  <div class="stat">
+                    <strong id="doneStat">0</strong><span>Tasks done</span>
+                  </div>
+                  <div class="stat"><strong>0d</strong><span>Streak</span></div>
+                </div>
+              </section>
+              <section class="card">
+                <div class="eyebrow">Tasks</div>
+                <h3>Today’s work</h3>
+                <div id="taskList" class="task-list"></div>
+                <div class="add-task-area">
+                  <button id="addTaskBtn" class="add-small">+ Add task</button>
+                  <div id="addForm" class="add-form">
+                    <input
+                      id="addInput"
+                      class="add-input"
+                      placeholder="What will you work on?"
+                    />
+                    <div class="add-actions">
+                      <button id="saveTask" class="save">Add task</button
+                      ><button id="cancelTask" class="cancel">Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <section class="card break-card">
+                <div class="eyebrow">Need a break?</div>
+                <h3>Protect your energy</h3>
+                <p>
+                  Short breaks help you return with a clearer mind. Step away,
+                  stretch, and breathe.
+                </p>
+                <button id="breakBtn">Start Short Break</button>
+                <div class="leaf">☘</div>
+              </section>
+            </aside>
+          </section>
+          <section class="mobile-support">
+            <section class="card today">
+              <div class="eyebrow">Today</div>
+              <h3>Your focus progress</h3>
+              <div class="stats">
+                <div class="stat">
+                  <strong id="focusStat2">0m</strong><span>Focus time</span>
+                </div>
+                <div class="stat">
+                  <strong id="sessionStat2">0</strong><span>Sessions</span>
+                </div>
+                <div class="stat">
+                  <strong id="doneStat2">0</strong><span>Tasks done</span>
+                </div>
+                <div class="stat"><strong>0d</strong><span>Streak</span></div>
+              </div>
+            </section>
+            <section class="card">
+              <div class="eyebrow">Tasks</div>
+              <h3>Today’s work</h3>
+              <div id="taskListMobile" class="task-list"></div>
+              <div class="add-task-area">
+                <button id="addTaskBtn2" class="add-small">+ Add task</button>
+                <div id="addForm2" class="add-form">
+                  <input
+                    id="addInput2"
+                    class="add-input"
+                    placeholder="What will you work on?"
+                  />
+                  <div class="add-actions">
+                    <button id="saveTask2" class="save">Add task</button
+                    ><button id="cancelTask2" class="cancel">Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section class="card break-card">
+              <div class="eyebrow">Need a break?</div>
+              <h3>Protect your energy</h3>
+              <p>Short breaks help you return with a clearer mind.</p>
+              <button id="breakBtn2">Start Short Break</button>
+              <div class="leaf">☘</div>
+            </section>
+          </section>
+          <section class="info">
+            <div class="info-kicker">Focus better with FocusFreq</div>
+            <h1>
+              An online Pomodoro timer with calming focus sounds and simple task
+              tracking.
+            </h1>
+            <p class="lead">
+              FocusFreq helps you choose one task, start a focused work session,
+              and stay with it using a clean timer, optional background sound,
+              and lightweight progress tracking.
+            </p>
+            <article class="article">
+              <h2>What is FocusFreq?</h2>
+              <p>
+                FocusFreq is a browser-based focus workspace built around the
+                Pomodoro method. It combines a focus timer, short and long
+                breaks, task context, session history, and optional focus sounds
+                such as noise, tones, and custom frequencies.
+              </p>
+            </article>
+            <article class="article">
+              <h2>What is the Pomodoro Technique?</h2>
+              <p>
+                The Pomodoro Technique breaks work into focused intervals
+                separated by short breaks. A common setup is 25 minutes of
+                focused work followed by a 5-minute break.
+              </p>
+            </article>
+            <article class="article">
+              <h2>How to use FocusFreq</h2>
+              <ol>
+                <li>Add or select one task.</li>
+                <li>Choose Focus, Short Break, or Long Break.</li>
+                <li>Pick an optional focus sound.</li>
+                <li>Start the timer and keep the workspace minimal.</li>
+              </ol>
+            </article>
+            <article class="article">
+              <h2>Core features</h2>
+              <div class="features">
+                <div class="feature">
+                  <strong>Pomodoro cycle</strong
+                  ><span>Customize focus, break, and interval settings.</span>
+                </div>
+                <div class="feature">
+                  <strong>Task context</strong
+                  ><span>Keep one active task visible.</span>
+                </div>
+                <div class="feature">
+                  <strong>Focus Sound</strong
+                  ><span
+                    >Use noise, tones, custom frequencies, or silent mode.</span
+                  >
+                </div>
+                <div class="feature">
+                  <strong>Session history</strong
+                  ><span>Track completed focus time and sessions.</span>
+                </div>
+              </div>
+            </article>
+          </section>
+        </main>
+      </div>
+    </div>
+    <script>
+      const $ = (id) => document.getElementById(id);
+      const st = {
+        mode: "focus",
+        pomodoro: 25,
+        short: 5,
+        long: 15,
+        remaining: 1500,
+        total: 1500,
+        status: "idle",
+        int: null,
+        sessions: 0,
+        focus: 0,
+        sound: "brown",
+        drawerMode: "noise",
+        noise: "brown",
+        freq: 432,
+        wave: "sine",
+        base: 200,
+        beat: 10,
+        vol: 20,
+        checkBottom: true,
+        tasks: [
+          {
+            id: 1,
+            title: "Write landing page copy",
+            meta: "2 sessions · 50m focused",
+            done: false,
+          },
+          {
+            id: 2,
+            title: "Review FocusFreq UI",
+            meta: "1 session · 25m focused",
+            done: false,
+          },
+          {
+            id: 3,
+            title: "Prepare deployment notes",
+            meta: "3 sessions · 75m focused",
+            done: true,
+          },
+        ],
+        active: 1,
+      };
+      const sounds = {
+        brown: [
+          "Noise",
+          "≈",
+          "Brown Noise",
+          "Steady background noise · 20% volume",
+          "Sound: Brown Noise · 20%",
+        ],
+        pink: [
+          "Noise",
+          "≈",
+          "Pink Noise",
+          "Balanced soft noise · 20% volume",
+          "Sound: Pink Noise · 20%",
+        ],
+        432: [
+          "Tone",
+          "∿",
+          "432 Hz · Sine",
+          "Clean tone · 20% volume",
+          "Sound: 432 Hz · Sine · 20%",
+        ],
+        40: [
+          "Tone",
+          "∿",
+          "40 Hz · Sine",
+          "Low tone preset · 20% volume",
+          "Sound: 40 Hz · Sine · 20%",
+        ],
+        none: [
+          "Silent",
+          "—",
+          "No Audio",
+          "Start silently or choose a focus sound",
+          "Sound: No Audio",
+        ],
+      };
+      function fmt(s) {
+        return `${Math.floor(s / 60)
+          .toString()
+          .padStart(2, "0")}:${Math.floor(s % 60)
+          .toString()
+          .padStart(2, "0")}`;
+      }
+      function fm(m) {
+        return m < 60
+          ? `${m}m`
+          : `${Math.floor(m / 60)}h${m % 60 ? " " + (m % 60) + "m" : ""}`;
+      }
+      function activeTask() {
+        return st.tasks.find((t) => t.id === st.active);
+      }
+      function setMode(m) {
+        if (st.status !== "idle") return;
+        st.mode = m;
+        setDur(
+          m === "focus" ? st.pomodoro : m === "short" ? st.short : st.long,
+        );
+      }
+      function setDur(m) {
+        st.total = m * 60;
+        st.remaining = st.total;
+        render();
+      }
+      function start() {
+        if (st.status === "running") return;
+        if ($("taskInput").value.trim() && !st.active)
+          addTask($("taskInput").value.trim());
+        st.status = "running";
+        document.body.classList.add("is-running");
+        document.body.classList.remove("is-paused");
+        clearInterval(st.int);
+        st.int = setInterval(() => {
+          st.remaining--;
+          if (st.remaining <= 0) complete();
+          render();
+        }, 1000);
+        render();
+      }
+      function pause() {
+        if (st.status === "running") {
+          st.status = "paused";
+          clearInterval(st.int);
+          document.body.classList.add("is-paused");
+          $("pause").textContent = "Resume";
+        } else if (st.status === "paused") {
+          st.status = "running";
+          document.body.classList.remove("is-paused");
+          $("pause").textContent = "Pause";
+          st.int = setInterval(() => {
+            st.remaining--;
+            if (st.remaining <= 0) complete();
+            render();
+          }, 1000);
+        }
+        render();
+      }
+      function end() {
+        clearInterval(st.int);
+        st.status = "idle";
+        document.body.classList.remove("is-running", "is-paused");
+        $("pause").textContent = "Pause";
+        st.remaining = st.total;
+        render();
+      }
+      function complete() {
+        clearInterval(st.int);
+        if (st.mode === "focus") {
+          st.sessions++;
+          st.focus += st.total / 60;
+        }
+        st.status = "idle";
+        document.body.classList.remove("is-running", "is-paused");
+        st.mode = st.mode === "focus" ? "short" : "focus";
+        setDur(st.mode === "short" ? st.short : st.pomodoro);
+      }
+      function addTask(title) {
+        const t = {
+          id: Date.now(),
+          title,
+          meta: "0 sessions · 0m focused",
+          done: false,
+        };
+        st.tasks.unshift(t);
+        st.active = t.id;
+        ["taskInput", "addInput", "addInput2"].forEach(
+          (id) => ($(id).value = ""),
+        );
+        closeAdd("desktop");
+        closeAdd("mobile");
+        render();
+      }
+      function openAdd(which) {
+        const mobile = which === "mobile";
+        $(mobile ? "addForm2" : "addForm").classList.add("open");
+        $(mobile ? "addTaskBtn2" : "addTaskBtn").style.display = "none";
+        setTimeout(() => $(mobile ? "addInput2" : "addInput").focus(), 0);
+      }
+      function closeAdd(which) {
+        const mobile = which === "mobile";
+        $(mobile ? "addForm2" : "addForm").classList.remove("open");
+        $(mobile ? "addInput2" : "addInput").value = "";
+        $(mobile ? "addTaskBtn2" : "addTaskBtn").style.display = "";
+      }
+      function submitAdd(which) {
+        const v = $(which === "mobile" ? "addInput2" : "addInput").value.trim();
+        if (v) addTask(v);
+      }
+      function tasks(target) {
+        const list = st.checkBottom
+          ? [...st.tasks].sort((a, b) => Number(a.done) - Number(b.done))
+          : [...st.tasks];
+        target.innerHTML = list
+          .map(
+            (t) =>
+              `<div class="task-row ${t.id === st.active ? "active" : ""} ${t.done ? "done" : ""}" data-id="${t.id}"><span class="check" data-done="${t.id}"></span><span><strong>${t.title}</strong><span>${t.meta}</span></span></div>`,
+          )
+          .join("");
+        target.querySelectorAll(".task-row").forEach(
+          (r) =>
+            (r.onclick = (e) => {
+              const c = e.target.closest("[data-done]");
+              if (c) {
+                const t = st.tasks.find((x) => x.id == c.dataset.done);
+                t.done = !t.done;
+              } else st.active = Number(r.dataset.id);
+              render();
+            }),
+        );
+      }
+      function renderSound() {
+        let s =
+          st.sound === "binaural"
+            ? [
+                "Binaural",
+                "◐",
+                `${st.base}/${st.base + st.beat} Hz Binaural`,
+                `${st.beat} Hz beat · ${st.vol}% volume`,
+                `Sound: ${st.base}/${st.base + st.beat} Hz Binaural · ${st.vol}%`,
+              ]
+            : sounds[st.sound] || [
+                "Tone",
+                "∿",
+                `${st.freq} Hz · ${st.wave}`,
+                `Custom tone · ${st.vol}% volume`,
+                `Sound: ${st.freq} Hz · ${st.wave} · ${st.vol}%`,
+              ];
+        if (st.mode !== "focus") {
+          s = [
+            "Break",
+            "—",
+            "Focus audio is off during breaks",
+            "Alarm still works when the break ends",
+            "Focus audio is off during break",
+          ];
+        }
+        $("soundMode").textContent = s[0];
+        $("soundIcon").textContent = s[1];
+        $("soundTitle").textContent = s[2];
+        $("soundDesc").textContent = s[3];
+        $("runningSound").textContent = s[4];
+        document
+          .querySelectorAll(".preset")
+          .forEach((b) =>
+            b.classList.toggle("active", b.dataset.sound === st.sound),
+          );
+      }
+      function render() {
+        $("timer").textContent = fmt(st.remaining);
+        $("fill").style.width =
+          `${Math.max(0, Math.min(100, ((st.total - st.remaining) / st.total) * 100))}%`;
+        $("fill").classList.toggle("break", st.mode !== "focus");
+        $("dot").classList.toggle("break", st.mode !== "focus");
+        $("start").classList.toggle("break", st.mode !== "focus");
+        $("start").textContent =
+          st.mode === "focus" ? "▶ Start Focusing" : "▶ Start Break";
+        const t = activeTask();
+        if (st.status !== "idle") {
+          $("taskInput").hidden = true;
+          $("taskTitle").hidden = false;
+          $("taskLabel").textContent = t ? "Working on" : "Free Focus";
+          $("taskTitle").textContent = t ? t.title : "Free Focus";
+        } else if (t) {
+          $("taskInput").hidden = true;
+          $("taskTitle").hidden = false;
+          $("taskLabel").textContent = "Working on";
+          $("taskTitle").textContent = t.title;
+          $("status").textContent =
+            st.mode === "focus" ? "Ready to focus" : "Ready for a break";
+        } else {
+          $("taskInput").hidden = false;
+          $("taskTitle").hidden = true;
+          $("taskLabel").textContent = "What will you focus on?";
+        }
+        document.querySelectorAll(".mode-tab").forEach((b) => {
+          const a = b.dataset.mode === st.mode;
+          b.classList.toggle("active", a);
+          b.classList.toggle("focus", a && st.mode === "focus");
+          b.classList.toggle("break", a && st.mode !== "focus");
+        });
+        const done = st.tasks.filter((t) => t.done).length;
+        ["focusStat", "focusStat2"].forEach(
+          (id) => ($(id).textContent = fm(st.focus)),
+        );
+        ["sessionStat", "sessionStat2"].forEach(
+          (id) => ($(id).textContent = st.sessions),
+        );
+        ["doneStat", "doneStat2"].forEach((id) => ($(id).textContent = done));
+        tasks($("taskList"));
+        tasks($("taskListMobile"));
+        renderSound();
+      }
+      document
+        .querySelectorAll(".mode-tab")
+        .forEach((b) => (b.onclick = () => setMode(b.dataset.mode)));
+      document.querySelectorAll(".preset").forEach(
+        (b) =>
+          (b.onclick = () => {
+            st.sound = b.dataset.sound;
+            render();
+          }),
+      );
+      $("start").onclick = start;
+      $("pause").onclick = pause;
+      $("end").onclick = end;
+      $("clearTask").onclick = () => {
+        st.active = null;
+        render();
+        $("taskInput").focus();
+      };
+      $("addTaskBtn").onclick = () => openAdd("desktop");
+      $("addTaskBtn2").onclick = () => openAdd("mobile");
+      $("saveTask").onclick = () => submitAdd("desktop");
+      $("saveTask2").onclick = () => submitAdd("mobile");
+      $("cancelTask").onclick = () => closeAdd("desktop");
+      $("cancelTask2").onclick = () => closeAdd("mobile");
+      $("addInput").onkeydown = (e) => {
+        if (e.key === "Enter") submitAdd("desktop");
+        if (e.key === "Escape") closeAdd("desktop");
+      };
+      $("addInput2").onkeydown = (e) => {
+        if (e.key === "Enter") submitAdd("mobile");
+        if (e.key === "Escape") closeAdd("mobile");
+      };
+      $("taskInput").onkeydown = (e) => {
+        if (e.key === "Enter" && $("taskInput").value.trim())
+          addTask($("taskInput").value.trim());
+      };
+      $("breakBtn").onclick = () => setMode("short");
+      $("breakBtn2").onclick = () => setMode("short");
+      $("previewBtn").onclick = () => {
+        $("previewBtn").textContent = "Playing...";
+        setTimeout(() => ($("previewBtn").textContent = "Preview"), 900);
+      };
+      $("openTimer").onclick = () => {
+        $("timerModal").classList.add("open");
+        $("pomodoro").value = st.pomodoro;
+        $("shortBreak").value = st.short;
+        $("longBreak").value = st.long;
+        $("checkBottom").classList.toggle("on", st.checkBottom);
+      };
+      $("closeTimer").onclick = () => $("timerModal").classList.remove("open");
+      $("saveTimer").onclick = () => {
+        st.pomodoro = Number($("pomodoro").value) || 25;
+        st.short = Number($("shortBreak").value) || 5;
+        st.long = Number($("longBreak").value) || 15;
+        if (st.mode === "focus") setDur(st.pomodoro);
+        if (st.mode === "short") setDur(st.short);
+        if (st.mode === "long") setDur(st.long);
+        $("timerModal").classList.remove("open");
+        render();
+      };
+      $("resetTimer").onclick = () => {
+        st.pomodoro = 25;
+        st.short = 5;
+        st.long = 15;
+        st.checkBottom = true;
+        render();
+      };
+      $("checkBottom").onclick = () => {
+        st.checkBottom = !st.checkBottom;
+        $("checkBottom").classList.toggle("on", st.checkBottom);
+        render();
+      };
+      $("changeSound").onclick = () => {
+        $("soundModal").classList.add("open");
+        renderDrawer();
+      };
+      $("closeSound").onclick = () => $("soundModal").classList.remove("open");
+      document.querySelectorAll(".mode-choice").forEach(
+        (b) =>
+          (b.onclick = () => {
+            st.drawerMode = b.dataset.mode;
+            renderDrawer();
+          }),
+      );
+      function renderDrawer() {
+        $("modePill").textContent = st.drawerMode;
+        document
+          .querySelectorAll(".mode-choice")
+          .forEach((b) =>
+            b.classList.toggle("active", b.dataset.mode === st.drawerMode),
+          );
+        $("noiseSec").hidden = st.drawerMode !== "noise";
+        $("toneSec").hidden = st.drawerMode !== "tone";
+        $("binSec").hidden = st.drawerMode !== "binaural";
+        $("volPill").textContent = $("volPill2").textContent = st.vol + "%";
+      }
+      document.querySelectorAll("[data-noise]").forEach(
+        (b) =>
+          (b.onclick = () => {
+            st.noise = b.dataset.noise;
+            document
+              .querySelectorAll("[data-noise]")
+              .forEach((x) => x.classList.toggle("active", x === b));
+          }),
+      );
+      document.querySelectorAll("[data-tone]").forEach(
+        (b) =>
+          (b.onclick = () => {
+            st.freq = Number(b.dataset.tone);
+            $("freq").value = st.freq;
+            document
+              .querySelectorAll("[data-tone]")
+              .forEach((x) => x.classList.toggle("active", x === b));
+          }),
+      );
+      $("volume").oninput = (e) => {
+        st.vol = Number(e.target.value);
+        renderDrawer();
+      };
+      $("applySound").onclick = () => {
+        if (st.drawerMode === "none") st.sound = "none";
+        if (st.drawerMode === "noise") st.sound = st.noise;
+        if (st.drawerMode === "tone") {
+          st.freq = Number($("freq").value) || 432;
+          st.wave = $("wave").value;
+          st.sound = String(st.freq);
+        }
+        if (st.drawerMode === "binaural") {
+          st.base = Number($("baseHz").value) || 200;
+          st.beat = Number($("beatHz").value) || 10;
+          st.sound = "binaural";
+        }
+        $("soundModal").classList.remove("open");
+        render();
+      };
+      $("drawerPreview").onclick = () => {
+        $("drawerPreview").textContent = "Playing...";
+        setTimeout(
+          () => ($("drawerPreview").textContent = "Preview Sound"),
+          900,
+        );
+      };
+      render();
+    </script>
+
+    <script>
+      (function () {
+        document.addEventListener(
+          "click",
+          function (event) {
+            var button = event.target.closest("[data-nav]");
+            if (!button) return;
+            var page = button.getAttribute("data-nav");
+            if (!page) return;
+            if (window.parent && window.parent !== window) {
+              event.preventDefault();
+              event.stopPropagation();
+              window.parent.postMessage(
+                { type: "focusfreq:navigate", page: page },
+                "*",
+              );
+            }
+          },
+          true,
+        );
+      })();
+    </script>
+  </body>
+</html>

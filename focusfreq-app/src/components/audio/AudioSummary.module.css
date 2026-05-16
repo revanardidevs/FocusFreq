@@ -1,0 +1,166 @@
+/* src/components/audio/AudioSummary.module.css */
+
+.soundCard {
+  margin: 18px 0;
+  border: 1px solid var(--color-audio-border, #d8d2ff);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at top left, rgba(108,99,255,0.14), transparent 34%),
+    linear-gradient(135deg, var(--color-audio-soft, #f1eeff), #fff 72%);
+  padding: 16px;
+  box-shadow: 0 10px 28px rgba(108,99,255,0.08);
+}
+
+.soundTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.soundLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-audio, #6c63ff);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.live {
+  width: 7px;
+  height: 7px;
+  border-radius: 99px;
+  background: var(--color-audio, #6c63ff);
+  box-shadow: 0 0 0 5px rgba(108,99,255,0.12);
+}
+
+.soundBody {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: center;
+}
+
+.soundMain {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.soundIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: linear-gradient(135deg, var(--color-audio, #6c63ff), #847cff);
+  font-size: 20px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.soundTitle {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.soundDesc {
+  margin: 3px 0 0;
+  color: var(--text-muted, #6f6a64);
+  font-size: 13px;
+}
+
+.soundActions {
+  display: flex;
+  gap: 8px;
+}
+
+.sbtn {
+  border: 0;
+  border-radius: 13px;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.preview {
+  composes: sbtn;
+  color: var(--color-audio, #6c63ff);
+  background: #fff;
+  border: 1px solid rgba(108,99,255,0.14);
+}
+
+.preview:hover {
+  background: var(--color-audio-soft, #f1eeff);
+}
+
+.change {
+  composes: sbtn;
+  color: #fff;
+  background: linear-gradient(135deg, var(--color-audio, #6c63ff), #847cff);
+}
+
+.change:hover {
+  opacity: 0.9;
+}
+
+.soundPresets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(108,99,255,0.14);
+}
+
+.preset {
+  border: 1px solid var(--color-audio-border, #d8d2ff);
+  background: #fff;
+  color: var(--color-audio, #6c63ff);
+  border-radius: 999px;
+  padding: 8px 10px;
+  font-size: 12px;
+  font-weight: 850;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.preset.active {
+  background: var(--color-audio, #6c63ff);
+  color: #fff;
+}
+
+.preset:hover:not(.active) {
+  background: var(--color-audio-soft, #f1eeff);
+}
+
+/* Running-mode pill (shown when timer is active) */
+.runningSound {
+  display: block;
+  margin: 12px auto 18px;
+  width: fit-content;
+  border: 1px solid var(--color-audio-border, #d8d2ff);
+  background: var(--color-audio-soft, #f1eeff);
+  color: var(--color-audio, #6c63ff);
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 850;
+}
+
+/* Eyebrow text for mode label on right */
+.modeLabel {
+  color: var(--text-muted, #6f6a64);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}

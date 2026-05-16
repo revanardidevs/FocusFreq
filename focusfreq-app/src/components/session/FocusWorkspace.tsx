@@ -23,6 +23,7 @@ import { writeSessionToSupabase } from '@/services/supabaseSessionService';
 import { AudioMode } from '@/types';
 import SettingsPanel from '@/components/settings/SettingsPanel';
 import { alarmService } from '@/lib/audio/alarmService';
+import styles from './FocusWorkspace.module.css';
 
 const Cog8ToothIcon = ({ className }: { className?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
@@ -44,6 +45,13 @@ const ChevronDownIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const XMarkIcon = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className={className}>
+    <line x1="18" y1="6" x2="6" y2="18" />
+    <line x1="6" y1="6" x2="18" y2="18" />
+  </svg>
+);
+
 const ChevronUpIcon = ({ className }: { className?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
@@ -62,6 +70,21 @@ function FocusWorkspaceInner() {
 
   const { user, profile, updateDisplayName } = useAuth();
   const audio = useAudio();
+
+  // Quick-mode handler for AudioSummary preset buttons
+  const handleQuickMode = useCallback((mode: AudioMode, detail?: string) => {
+    if (mode === AudioMode.NONE) {
+      audio.updateSettings({ mode: AudioMode.NONE });
+    } else if (mode === AudioMode.NOISE && detail) {
+      audio.updateSettings({ mode: AudioMode.NOISE });
+      audio.updateNoise({ type: detail as any });
+    } else if (mode === AudioMode.TONE && detail) {
+      audio.updateSettings({ mode: AudioMode.TONE });
+      audio.updateTone({ frequencyHz: parseInt(detail, 10) });
+    }
+    audio.stopPreview();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleAutoStart = useCallback(() => {
     handleStart();
@@ -275,84 +298,65 @@ function FocusWorkspaceInner() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-4 relative">
+    <div className={isTimerActive ? styles.running : styles.idle}>
       <SettingsPanel isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
 
-      {/* Main Timer Card */}
-      <div className={`rounded-xl bg-white border shadow-card p-5 sm:p-6 mb-4 relative transition-all duration-300 overflow-hidden max-w-[680px] mx-auto ${
-        isBreak ? 'border-break-border' : 'border-surface-200'
-      }`}>
-        
-        <button 
-          onClick={() => setIsSettingsOpen(true)}
-          className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full text-text-muted hover:text-text-primary hover:bg-surface-50 transition-colors z-10"
-          title="Settings"
-        >
-          <Cog8ToothIcon className="w-5 h-5" />
-        </button>
-
-        <div className="flex flex-col items-center space-y-4">
+      <section className={styles.workspace}>
+        {/* Main Timer Card */}
+        <div className={`${styles.timerCard} ${isBreak ? 'border-break-border' : 'border-surface-200'}`}>
           
+          <div className={styles.topActions}>
+            <button 
+              onClick={() => setIsSettingsOpen(true)}
+              className={styles.iconBtn}
+              title="Settings"
+            >
+              <Cog8ToothIcon className="w-6 h-6" />
+            </button>
+            {selectedTaskId && !isTimerActive && (
+              <button 
+                onClick={() => setSelectedTaskId(null)} 
+                className={styles.iconBtn}
+                title="Clear task"
+              >
+                <XMarkIcon className="w-6 h-6" />
+              </button>
+            )}
+          </div>
+
+        
           {/* Current Task Area */}
-          <div className="w-full">
+          <div className={styles.taskHead}>
             {selectedTaskId ? (
-              <div className="flex flex-col items-center justify-center space-y-1">
-                <span className="text-[13px] font-semibold text-text-secondary">
-                  Working on
-                </span>
-                <div className="flex items-center gap-3">
-                  <span className="text-[22px] md:text-[24px] font-bold text-text-primary text-center">
-                    {tasks.find((t) => t.id === selectedTaskId)?.title || 'Unknown Task'}
-                  </span>
-                  {!isTimerActive && (
-                    <button 
-                      onClick={() => setSelectedTaskId(null)} 
-                      className="text-text-muted hover:text-text-strong transition-colors"
-                      title="Edit task"
-                    >
-                      <PencilIcon className="w-[18px] h-[18px]" />
-                    </button>
-                  )}
-                </div>
-              </div>
+              <>
+                <div className={styles.eyebrow}>Working on</div>
+                <h1 className={styles.taskTitle}>
+                  {tasks.find((t) => t.id === selectedTaskId)?.title || 'Unknown Task'}
+                </h1>
+              </>
             ) : (
               !isTimerActive && (
-                <div className="flex flex-col items-center justify-center w-full max-w-[540px] mx-auto">
-                  <div className="w-full mb-2">
-                    <span className="text-[13px] font-semibold text-text-muted text-center block">
-                      What will you focus on?
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-center w-full gap-2">
-                    <form onSubmit={handleTaskSubmit} className="w-full flex justify-center">
-                      <div className="relative group inline-flex items-center max-w-full">
-                        <span className="invisible whitespace-pre text-[14px] font-medium px-4 py-2.5 overflow-hidden text-center max-w-[calc(100vw-4rem)] sm:max-w-md">
-                          {taskInputVal || "e.g., Write landing page copy"}
-                        </span>
-                        <input
-                          type="text"
-                          value={taskInputVal}
-                          onChange={(e) => setTaskInputVal(e.target.value)}
-                          placeholder="e.g., Write landing page copy"
-                          className="absolute inset-0 w-full h-full rounded-full bg-transparent px-4 text-[14px] font-medium text-text-primary placeholder-text-muted outline-none transition-all focus:bg-surface-50 text-center"
-                          autoComplete="off"
-                        />
-                        <div className="absolute right-0 translate-x-1 top-1/2 -translate-y-1/2 text-surface-400 pointer-events-none group-hover:text-text-muted transition-colors">
-                          <PencilIcon className="w-[16px] h-[16px]" />
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
+                <>
+                  <div className={styles.eyebrow}>What will you focus on?</div>
+                  <form onSubmit={handleTaskSubmit} className="w-full">
+                    <input
+                      type="text"
+                      value={taskInputVal}
+                      onChange={(e) => setTaskInputVal(e.target.value)}
+                      placeholder="e.g. Write landing page copy"
+                      className={styles.taskInput}
+                      autoComplete="off"
+                    />
+                  </form>
+                </>
               )
             )}
             {/* Free Focus Fallback */}
             {!selectedTaskId && isTimerActive && cycle.currentMode === 'focus' && (
-              <div className="flex flex-col items-center justify-center">
-                <span className="text-lg md:text-xl font-semibold text-text-primary text-center">
-                  Free Focus
-                </span>
-              </div>
+              <>
+                <div className={styles.eyebrow}>Free Focus</div>
+                <h1 className={styles.taskTitle}>Free Focus</h1>
+              </>
             )}
           </div>
 
@@ -399,7 +403,7 @@ function FocusWorkspaceInner() {
             <>
               {/* Mode Tabs (Above Timer) */}
               {!isTimerActive && (
-                <div className="w-full flex justify-center animate-fade-in">
+                <div className="w-full animate-fade-in">
                   <ModeTabs
                     currentMode={cycle.currentMode}
                     onModeChange={cycle.setMode}
@@ -442,10 +446,13 @@ function FocusWorkspaceInner() {
                         />
                       </div>
                     ) : (
-                      <div className="animate-fade-in">
+                      <div className="animate-fade-in w-full">
                         <AudioSummary
                           settings={audio.settings}
+                          isPreviewing={audio.isPreviewing}
                           onOpenPanel={() => setIsAudioPanelOpen(true)}
+                          onTogglePreview={audio.togglePreview}
+                          onQuickMode={handleQuickMode}
                         />
                       </div>
                     )
@@ -466,66 +473,84 @@ function FocusWorkspaceInner() {
                   <AudioSummary
                     settings={audio.settings}
                     onOpenPanel={() => setIsSettingsOpen(true)}
+                    compact
                   />
                 </div>
               )}
 
               {/* Controls */}
-              <div className="pt-2">
-                <TimerControls
-                  timerState={timer.timerState}
-                  canStart={cycle.currentMinutes > 0}
-                  onStart={handleStart}
-                  onPause={handlePause}
-                  onResume={handleResume}
-                  onAbandon={timer.abandon}
-                  onReset={handleRecapDismiss}
-                  startLabel={cycle.currentMode === 'focus' ? 'Start Focusing' : 'Start Break'}
-                  isBreak={isBreak}
-                />
-              </div>
+              <TimerControls
+                timerState={timer.timerState}
+                canStart={cycle.currentMinutes > 0}
+                onStart={handleStart}
+                onPause={handlePause}
+                onResume={handleResume}
+                onAbandon={timer.abandon}
+                onReset={handleRecapDismiss}
+                startLabel={cycle.currentMode === 'focus' ? 'Start Focusing' : 'Start Break'}
+                isBreak={isBreak}
+              />
             </>
           )}
         </div>
-      </div>
 
-      {/* Secondary Row (Tasks + Today Summary) */}
-      {!isTimerActive && (
-        <div className="mx-auto max-w-[680px] flex flex-col md:flex-row items-center justify-between gap-2 px-2 animate-fade-in">
-          {/* Tasks Toggle */}
-          <button
-            onClick={() => setIsTasksExpanded(!isTasksExpanded)}
-            className="flex items-center gap-2 text-sm font-semibold text-text-muted hover:text-text-primary transition-colors py-2 px-3 rounded-lg hover:bg-surface-100/50"
-          >
-            Tasks ({tasks.length})
-            {isTasksExpanded ? <ChevronUpIcon className="w-4 h-4" /> : <ChevronDownIcon className="w-4 h-4" />}
-          </button>
-          
-          {/* Compact Today Summary */}
-          <div className="text-sm font-medium text-text-muted">
-            <OverviewStatsInline />
-          </div>
-        </div>
-      )}
+        {/* Sidebar / Stats / Tasks */}
+        <aside className={styles.side}>
+          <OverviewStatsInline />
 
-      {/* Expandable Task Panel */}
-      <div 
-        className={`mx-auto max-w-[680px] grid transition-all duration-300 ease-in-out ${
-          isTasksExpanded && !isTimerActive ? 'grid-rows-[1fr] opacity-100 mt-4' : 'grid-rows-[0fr] opacity-0 pointer-events-none mt-0'
-        }`}
-      >
-        <div className="overflow-hidden bg-white border border-surface-200 rounded-[24px] shadow-soft p-4">
-          <TaskList
-            tasks={tasks}
-            selectedTaskId={selectedTaskId}
-            onSelectTask={setSelectedTaskId}
-            onCreateTask={createTask}
-            onUpdateTask={updateTask}
-            onCompleteTask={completeTask}
-            onDeleteTask={deleteTask}
-          />
+          <section className={styles.card}>
+            <div className={styles.eyebrow}>Tasks</div>
+            <h3>Today&apos;s work</h3>
+            <TaskList
+              tasks={tasks}
+              selectedTaskId={selectedTaskId}
+              onSelectTask={setSelectedTaskId}
+              onCreateTask={createTask}
+              onUpdateTask={updateTask}
+              onCompleteTask={completeTask}
+              onDeleteTask={deleteTask}
+            />
+          </section>
+
+          {/* Break card suggestion */}
+          {cycle.currentMode === 'focus' && !isTimerActive && (
+            <section className={`${styles.card} ${styles.breakCard}`}>
+              <h3>Need a break?</h3>
+              <p>Step away for 5 minutes. Stretch, hydrate, and rest your eyes.</p>
+              <button onClick={() => cycle.setMode('short_break')}>
+                Take a short break
+              </button>
+              <div className={styles.leaf}>🌿</div>
+            </section>
+          )}
+        </aside>
+
+        {/* Mobile Support (duplicates sidebar content below timer on small screens) */}
+        <div className={styles.mobileSupport}>
+          <OverviewStatsInline />
+          <section className={styles.card}>
+            <TaskList
+              tasks={tasks}
+              selectedTaskId={selectedTaskId}
+              onSelectTask={setSelectedTaskId}
+              onCreateTask={createTask}
+              onUpdateTask={updateTask}
+              onCompleteTask={completeTask}
+              onDeleteTask={deleteTask}
+            />
+          </section>
+          {cycle.currentMode === 'focus' && !isTimerActive && (
+            <section className={`${styles.card} ${styles.breakCard}`}>
+              <h3>Need a break?</h3>
+              <p>Step away for 5 minutes. Stretch, hydrate, and rest your eyes.</p>
+              <button onClick={() => cycle.setMode('short_break')}>
+                Take a short break
+              </button>
+              <div className={styles.leaf}>🌿</div>
+            </section>
+          )}
         </div>
-      </div>
+      </section>
     </div>
   );
 }
@@ -540,13 +565,43 @@ function OverviewStatsInline() {
   }, []);
 
   if (!stats) {
-    return <span className="opacity-0 select-none">Today: —</span>;
+    return (
+      <section className={`${styles.card} ${styles.today}`}>
+        <div className={styles.eyebrow}>Today</div>
+        <h3>Your focus progress</h3>
+        <div className={styles.stats}>
+          <div className={styles.stat}><strong>-</strong><span>Focus time</span></div>
+          <div className={styles.stat}><strong>-</strong><span>Sessions</span></div>
+          <div className={styles.stat}><strong>-</strong><span>Tasks done</span></div>
+          <div className={styles.stat}><strong>-</strong><span>Streak</span></div>
+        </div>
+      </section>
+    );
   }
 
   return (
-    <span>
-      Today: {formatMinutes(stats.todayFocusMinutes)} · {stats.todayCompletedSessions} sessions · Streak {stats.currentStreak}
-    </span>
+    <section className={`${styles.card} ${styles.today}`}>
+      <div className={styles.eyebrow}>Today</div>
+      <h3>Your focus progress</h3>
+      <div className={styles.stats}>
+        <div className={styles.stat}>
+          <strong>{formatMinutes(stats.todayFocusMinutes)}</strong>
+          <span>Focus time</span>
+        </div>
+        <div className={styles.stat}>
+          <strong>{stats.todayCompletedSessions}</strong>
+          <span>Sessions</span>
+        </div>
+        <div className={styles.stat}>
+          <strong>{stats.todayAbandonedSessions}</strong>
+          <span>Abandoned</span>
+        </div>
+        <div className={styles.stat}>
+          <strong>{stats.currentStreak}</strong>
+          <span>Streak 🔥</span>
+        </div>
+      </div>
+    </section>
   );
 }
 

@@ -1,0 +1,1411 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FocusFreq Leaderboard — Clean Top Sound Version</title>
+<style>
+:root{
+  --bg:#fafaf7;
+  --card:#fff;
+  --soft:#fffdf9;
+  --text:#111827;
+  --muted:#6f6a64;
+  --softText:#8a817a;
+  --border:#eae6df;
+
+  --focus:#f05a3c;
+  --focusSoft:#fff0ea;
+  --focusBorder:#ffc9ba;
+
+  --break:#2fae75;
+  --breakSoft:#eaf8f1;
+
+  --audio:#6c63ff;
+  --audioSoft:#f1eeff;
+  --audioBorder:#d8d2ff;
+
+  --gold:#f59e0b;
+  --goldSoft:#fff8e7;
+  --blueSoft:#eef8ff;
+
+  --shadow:0 18px 50px rgba(31,24,16,.06);
+  --shadow2:0 10px 28px rgba(31,24,16,.05);
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at top left,rgba(240,90,60,.09),transparent 30%),
+    radial-gradient(circle at bottom right,rgba(108,99,255,.07),transparent 30%),
+    var(--bg);
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.shell{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:236px 1fr;
+}
+
+.sidebar{
+  position:sticky;
+  top:0;
+  height:100vh;
+  padding:28px 20px;
+  border-right:1px solid var(--border);
+  background:rgba(255,255,255,.78);
+  backdrop-filter:blur(18px);
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:20px;
+  font-weight:850;
+  letter-spacing:-.04em;
+}
+
+.logo{width:42px;height:42px}
+.logo svg{width:100%;height:100%}
+
+.nav{
+  display:grid;
+  gap:8px;
+}
+
+.nav button{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  text-align:left;
+  padding:12px 14px;
+  border-radius:14px;
+  font-weight:750;
+}
+
+.nav .active{
+  background:var(--focusSoft);
+  color:var(--focus);
+  outline:1px solid var(--focusBorder);
+}
+
+.sidebar-card{
+  margin-top:auto;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:18px;
+  box-shadow:var(--shadow2);
+}
+
+.sidebar-card p{
+  margin:8px 0 0;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.55;
+}
+
+.eyebrow{
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  font-size:11px;
+  font-weight:900;
+  color:var(--softText);
+}
+
+.mobile-top{display:none}
+
+.main{padding:34px}
+
+.page{
+  width:min(1180px,100%);
+  margin:auto;
+}
+
+/* Hero */
+
+.hero{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:22px;
+  margin-bottom:24px;
+}
+
+.hero h1{
+  margin:6px 0 0;
+  font-size:clamp(34px,4vw,52px);
+  line-height:1.02;
+  letter-spacing:-.065em;
+}
+
+.hero p{
+  margin:12px 0 0;
+  max-width:660px;
+  color:var(--muted);
+  font-size:16px;
+  line-height:1.65;
+}
+
+.hero-actions{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.btn{
+  border:1px solid var(--border);
+  border-radius:15px;
+  background:#fff;
+  color:var(--muted);
+  min-height:44px;
+  padding:0 14px;
+  font-weight:850;
+}
+
+.btn.primary{
+  border:0;
+  color:#fff;
+  background:linear-gradient(135deg,var(--focus),#ff735c);
+  box-shadow:0 12px 26px rgba(240,90,60,.18);
+}
+
+.pills{
+  margin-top:18px;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.pill{
+  display:inline-flex;
+  align-items:center;
+  border-radius:999px;
+  background:var(--focusSoft);
+  border:1px solid var(--focusBorder);
+  color:var(--focus);
+  padding:9px 12px;
+  font-size:13px;
+  font-weight:900;
+}
+
+.pill.gold{
+  background:var(--goldSoft);
+  border-color:#fde68a;
+  color:#a16207;
+}
+
+.privacy{
+  margin-top:12px;
+  color:var(--muted);
+  font-size:13px;
+  font-weight:750;
+}
+
+/* Summary */
+
+.summary{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:14px;
+  margin-bottom:18px;
+}
+
+.stat{
+  background:rgba(255,255,255,.9);
+  border:1px solid var(--border);
+  border-radius:24px;
+  box-shadow:var(--shadow2);
+  padding:18px;
+}
+
+.stat strong{
+  display:block;
+  font-size:28px;
+  letter-spacing:-.05em;
+}
+
+.stat span{
+  display:block;
+  margin-top:5px;
+  color:var(--muted);
+  font-size:13px;
+  font-weight:750;
+}
+
+.stat.focus{
+  background:linear-gradient(135deg,#fff,var(--focusSoft));
+  border-color:var(--focusBorder);
+}
+
+.stat.gold{
+  background:linear-gradient(135deg,#fff,var(--goldSoft));
+  border-color:#fde68a;
+}
+
+.stat.audio{
+  background:linear-gradient(135deg,#fff,var(--audioSoft));
+  border-color:var(--audioBorder);
+}
+
+.stat.sound{
+  background:linear-gradient(135deg,#fff,var(--blueSoft));
+  border-color:#bae6fd;
+}
+
+/* Race card */
+
+.race{
+  display:grid;
+  grid-template-columns:1.15fr 1fr;
+  gap:16px;
+  align-items:center;
+  margin-bottom:18px;
+  background:linear-gradient(135deg,#fff,var(--focusSoft));
+  border:1px solid var(--focusBorder);
+  border-radius:28px;
+  box-shadow:var(--shadow);
+  padding:22px;
+}
+
+.race h2{
+  margin:4px 0 0;
+  font-size:28px;
+  line-height:1.08;
+  letter-spacing:-.055em;
+}
+
+.race p{
+  margin:10px 0 0;
+  color:var(--muted);
+  line-height:1.55;
+}
+
+.race-steps{
+  display:grid;
+  gap:10px;
+}
+
+.race-step{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+  border:1px solid rgba(255,255,255,.8);
+  background:rgba(255,255,255,.62);
+  border-radius:18px;
+  padding:13px;
+}
+
+.race-step span{
+  color:var(--muted);
+  font-size:13px;
+  font-weight:750;
+}
+
+.race-step strong{font-size:15px}
+.hot{color:var(--focus)}
+
+/* Layout */
+
+.layout{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 330px;
+  gap:22px;
+  align-items:start;
+}
+
+.card{
+  background:rgba(255,255,255,.92);
+  border:1px solid var(--border);
+  border-radius:28px;
+  box-shadow:var(--shadow);
+  padding:22px;
+}
+
+.card h2{
+  margin:0;
+  font-size:24px;
+  letter-spacing:-.045em;
+}
+
+.card-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:18px;
+}
+
+/* Podium */
+
+.podium{
+  display:grid;
+  grid-template-columns:1fr 1.15fr 1fr;
+  gap:14px;
+  align-items:end;
+}
+
+.podium-card{
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--border);
+  border-radius:28px;
+  background:var(--soft);
+  box-shadow:var(--shadow2);
+  padding:20px;
+  text-align:center;
+}
+
+.podium-card::before{
+  content:"";
+  position:absolute;
+  inset:-35% -35% auto auto;
+  width:180px;
+  height:180px;
+  border-radius:999px;
+  opacity:.42;
+  filter:blur(4px);
+  pointer-events:none;
+}
+
+.podium-card::after{
+  content:"";
+  position:absolute;
+  inset:1px;
+  border-radius:27px;
+  border:1px solid rgba(255,255,255,.52);
+  pointer-events:none;
+}
+
+.podium-card > *{
+  position:relative;
+  z-index:1;
+}
+
+.podium-card.first{
+  min-height:238px;
+  background:
+    radial-gradient(circle at 82% 12%,rgba(255,214,102,.44),transparent 32%),
+    linear-gradient(145deg,#fffdf3 0%,#fff8df 45%,#fffef8 100%);
+  border-color:#f7cf62;
+  box-shadow:0 22px 60px rgba(245,158,11,.15);
+}
+
+.podium-card.first::before{
+  background:#f59e0b;
+}
+
+.podium-card.second{
+  min-height:208px;
+  background:
+    radial-gradient(circle at 82% 12%,rgba(148,163,184,.34),transparent 32%),
+    linear-gradient(145deg,#ffffff 0%,#f4f7fb 48%,#ffffff 100%);
+  border-color:#cbd5e1;
+  box-shadow:0 20px 54px rgba(100,116,139,.12);
+}
+
+.podium-card.second::before{
+  background:#94a3b8;
+}
+
+.podium-card.third{
+  min-height:190px;
+  background:
+    radial-gradient(circle at 82% 12%,rgba(245,132,84,.30),transparent 32%),
+    linear-gradient(145deg,#fffaf7 0%,#fff0e8 48%,#ffffff 100%);
+  border-color:#fdba74;
+  box-shadow:0 20px 54px rgba(192,132,87,.13);
+}
+
+.podium-card.third::before{
+  background:#f97316;
+}
+
+.medal{
+  display:inline-grid;
+  place-items:center;
+  width:46px;
+  height:46px;
+  border-radius:999px;
+  margin-bottom:12px;
+  font-size:20px;
+  font-weight:900;
+  box-shadow:0 10px 24px rgba(31,24,16,.10);
+}
+
+.first .medal{background:linear-gradient(135deg,#f59e0b,#facc15);color:#fff}
+.second .medal{background:linear-gradient(135deg,#94a3b8,#cbd5e1);color:#fff}
+.third .medal{background:linear-gradient(135deg,#c08457,#fb923c);color:#fff}
+
+.avatar{
+  width:58px;
+  height:58px;
+  border-radius:21px;
+  margin:0 auto 10px;
+  display:grid;
+  place-items:center;
+  color:#fff;
+  font-weight:900;
+  font-size:21px;
+  background:linear-gradient(135deg,var(--focus),#ff735c);
+  box-shadow:0 14px 28px rgba(240,90,60,.18);
+}
+
+.podium-card h3{
+  margin:0;
+  font-size:18px;
+}
+
+.podium-card p{
+  margin:6px 0 0;
+  color:var(--muted);
+  font-size:13px;
+  font-weight:750;
+}
+
+.podium-score{
+  margin-top:14px;
+  background:rgba(255,255,255,.76);
+  border:1px solid rgba(255,255,255,.86);
+  border-radius:20px;
+  padding:14px 12px;
+  box-shadow:0 14px 34px rgba(31,24,16,.06);
+  backdrop-filter:blur(10px);
+}
+
+.podium-focus{
+  display:block;
+  font-size:24px;
+  line-height:1;
+  font-weight:950;
+  letter-spacing:-.045em;
+  color:var(--text);
+}
+
+.podium-meta{
+  display:block;
+  margin-top:6px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.25;
+  font-weight:800;
+}
+
+.podium-card.first .podium-focus{
+  font-size:26px;
+}
+
+.podium-card.first .podium-meta{
+  color:#8a6a10;
+}
+
+.you-tag{
+  display:inline-flex;
+  margin-top:9px;
+  border-radius:999px;
+  background:var(--focusSoft);
+  border:1px solid var(--focusBorder);
+  color:var(--focus);
+  padding:6px 9px;
+  font-size:12px;
+  font-weight:900;
+}
+
+/* Leaderboard table */
+
+.privacy-strip{
+  margin-bottom:14px;
+  border:1px solid var(--border);
+  background:var(--soft);
+  border-radius:18px;
+  padding:12px 14px;
+  color:var(--muted);
+  font-size:13px;
+  font-weight:750;
+  line-height:1.45;
+}
+
+.toolbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:16px;
+}
+
+.filters{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.filter{
+  border:1px solid var(--border);
+  background:#fff;
+  color:var(--muted);
+  border-radius:999px;
+  padding:9px 12px;
+  font-size:13px;
+  font-weight:850;
+}
+
+.filter.active{
+  background:var(--focusSoft);
+  color:var(--focus);
+  border-color:var(--focusBorder);
+}
+
+.tools{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.search,
+.select{
+  border:1px solid var(--border);
+  border-radius:15px;
+  background:#fff;
+  color:var(--muted);
+  min-height:44px;
+  padding:0 14px;
+  font-weight:850;
+}
+
+.search{
+  width:min(300px,100%);
+  outline:none;
+}
+
+.select{
+  border-radius:999px;
+  font-size:13px;
+}
+
+.leaderboard{
+  display:grid;
+  gap:10px;
+  overflow-x:auto;
+  padding-bottom:2px;
+}
+
+.lb-row{
+  display:grid;
+  grid-template-columns:70px minmax(250px,1.5fr) 130px 170px 100px 90px;
+  align-items:center;
+  gap:14px;
+  border:1px solid var(--border);
+  background:var(--soft);
+  border-radius:20px;
+  padding:16px 18px;
+  min-height:86px;
+  min-width:860px;
+}
+
+.lb-row.header{
+  background:transparent;
+  border:0;
+  color:var(--softText);
+  font-size:12px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  padding:0 18px;
+  min-height:auto;
+}
+
+.lb-row.you{
+  background:var(--focusSoft);
+  border-color:var(--focusBorder);
+}
+
+.lb-rank{
+  font-weight:900;
+  color:var(--muted);
+  font-size:15px;
+}
+
+.lb-member{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:0;
+}
+
+.mini-avatar{
+  width:44px;
+  height:44px;
+  border-radius:16px;
+  display:grid;
+  place-items:center;
+  color:#fff;
+  background:linear-gradient(135deg,var(--audio),#847cff);
+  font-weight:900;
+  flex:0 0 44px;
+}
+
+.member-meta{
+  min-width:0;
+}
+
+.name-line{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-width:0;
+}
+
+.lb-name{
+  display:block;
+  font-size:16px;
+  line-height:1.15;
+  letter-spacing:-.02em;
+  font-weight:900;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.lb-name.you{
+  color:var(--focus);
+}
+
+.shift{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:22px;
+  height:22px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:900;
+  flex-shrink:0;
+}
+
+.shift.up{
+  color:var(--break);
+  background:var(--breakSoft);
+}
+
+.handle{
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.2;
+  margin-top:4px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.score{
+  font-weight:900;
+  white-space:nowrap;
+  font-size:15px;
+}
+
+.sound-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:999px;
+  background:var(--audioSoft);
+  border:1px solid var(--audioBorder);
+  color:var(--audio);
+  padding:7px 10px;
+  font-size:12px;
+  font-weight:900;
+  white-space:nowrap;
+  max-width:100%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.muted{
+  color:var(--muted);
+  font-size:13px;
+  font-weight:750;
+  white-space:nowrap;
+}
+
+/* Side cards */
+
+.side{
+  display:grid;
+  gap:18px;
+}
+
+.rank-card{
+  background:linear-gradient(135deg,#fff,var(--focusSoft));
+  border-color:var(--focusBorder);
+}
+
+.rank-card h3{
+  margin:4px 0 0;
+  font-size:24px;
+  letter-spacing:-.05em;
+}
+
+.rank-card p,
+.insight p{
+  color:var(--muted);
+  line-height:1.55;
+  margin:10px 0 0;
+}
+
+.progress-wrap{
+  margin-top:16px;
+}
+
+.progress-label{
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:12px;
+  font-weight:850;
+  margin-bottom:8px;
+}
+
+.progress{
+  height:10px;
+  border-radius:999px;
+  background:#f1ece6;
+  overflow:hidden;
+}
+
+.progress span{
+  display:block;
+  height:100%;
+  width:68%;
+  background:linear-gradient(135deg,var(--focus),#ff735c);
+}
+
+.insight{
+  background:linear-gradient(135deg,#fff,var(--audioSoft));
+  border-color:var(--audioBorder);
+}
+
+.empty{
+  display:none;
+  text-align:center;
+  border:1px dashed var(--border);
+  background:var(--soft);
+  border-radius:22px;
+  padding:34px;
+  color:var(--muted);
+}
+
+
+.popular-card{
+  background:linear-gradient(135deg,#fff,var(--soft));
+}
+
+.popular-list{
+  display:grid;
+  gap:10px;
+  margin-top:14px;
+}
+
+.popular-item{
+  display:grid;
+  grid-template-columns:44px 1fr auto;
+  gap:10px;
+  align-items:center;
+  border:1px solid var(--border);
+  background:var(--soft);
+  border-radius:16px;
+  padding:11px;
+}
+
+.popular-icon{
+  width:44px;
+  height:44px;
+  border-radius:15px;
+  display:grid;
+  place-items:center;
+  font-weight:900;
+  color:#fff;
+  background:linear-gradient(135deg,var(--audio),#847cff);
+}
+
+.popular-icon.focus{
+  background:linear-gradient(135deg,var(--focus),#ff735c);
+}
+
+.popular-item strong{
+  display:block;
+  font-size:13px;
+  line-height:1.2;
+}
+
+.popular-item span{
+  display:block;
+  margin-top:3px;
+  color:var(--muted);
+  font-size:12px;
+  font-weight:750;
+}
+
+.popular-value{
+  font-size:12px;
+  font-weight:900;
+  color:var(--audio);
+  background:var(--audioSoft);
+  border:1px solid var(--audioBorder);
+  border-radius:999px;
+  padding:6px 8px;
+  white-space:nowrap;
+}
+
+.popular-value.focus{
+  color:var(--focus);
+  background:var(--focusSoft);
+  border-color:var(--focusBorder);
+}
+
+.mini-note{
+  margin-top:12px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.45;
+}
+
+.toast{
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  z-index:99;
+  background:#111827;
+  color:#fff;
+  border-radius:16px;
+  padding:13px 16px;
+  box-shadow:0 18px 50px rgba(0,0,0,.18);
+  font-weight:850;
+  display:none;
+}
+
+.toast.show{display:block}
+
+@media(max-width:1080px){
+  .shell{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .mobile-top{
+    display:flex;
+    position:sticky;
+    top:0;
+    z-index:10;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 18px;
+    border-bottom:1px solid var(--border);
+    background:rgba(255,255,255,.84);
+    backdrop-filter:blur(16px);
+  }
+  .layout{grid-template-columns:1fr}
+  .summary{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:760px){
+  .race{grid-template-columns:1fr}
+  .main{padding:18px 14px 42px}
+  .hero{display:block}
+  .hero-actions{margin-top:16px}
+  .summary{grid-template-columns:1fr 1fr;gap:10px}
+  .stat{padding:15px;border-radius:20px}
+  .stat strong{font-size:23px}
+  .card{padding:17px;border-radius:22px}
+  .card-head{display:block}
+  .toolbar{display:block}
+  .tools{margin-top:14px}
+  .search,.select{width:100%;margin-bottom:10px}
+  .podium{grid-template-columns:1fr}
+  .podium-card,
+  .podium-card.first,
+  .podium-card.second,
+  .podium-card.third{min-height:auto}
+  .hero h1{font-size:36px}
+}
+
+.nav button{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  width:100%;
+}
+
+.nav button .nav-icon{
+  width:19px;
+  height:19px;
+  flex:0 0 19px;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.nav button span{
+  line-height:1;
+}
+
+.nav button.active{
+  font-weight:900;
+}
+
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">
+        <svg viewBox="0 0 64 64" fill="none">
+          <path d="M32 10v44M22 18v28M42 18v28M13 26v12M51 26v12M5 31v2M59 31v2" stroke="#F05A3C" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span>FocusFreq</span>
+    </div>
+
+    <nav class="nav"><button data-nav="focus"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7.5"></circle><circle cx="12" cy="12" r="2.5"></circle></svg><span>Focus</span></button><button data-nav="history"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"></circle><path d="M12 7v5l3 2"></path></svg><span>History</span></button><button class="active" data-nav="leaderboard"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 20h8"></path><path d="M12 16v4"></path><path d="M7 4h10v3a5 5 0 0 1-10 0V4Z"></path><path d="M7 7H4a3 3 0 0 0 3 3"></path><path d="M17 7h3a3 3 0 0 1-3 3"></path></svg><span>Leaderboard</span></button></nav>
+
+    <div class="sidebar-card">
+      <div class="eyebrow">Leaderboard</div>
+      <p>Only completed focus sessions count. Private task names stay private.</p>
+    </div>
+  </aside>
+
+  <div>
+    <header class="mobile-top">
+      <div class="brand">
+        <div class="logo">
+          <svg viewBox="0 0 64 64" fill="none">
+            <path d="M32 10v44M22 18v28M42 18v28M13 26v12M51 26v12M5 31v2M59 31v2" stroke="#F05A3C" stroke-width="5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span>FocusFreq</span>
+      </div>
+      <button class="btn" id="mobileMenuBtn">Menu</button>
+    </header>
+
+    <main class="main">
+      <div class="page">
+        <section class="hero">
+          <div>
+            <div class="eyebrow">Weekly Focus Leaderboard</div>
+            <h1>You’re #3 this week.</h1>
+            <p>Complete <strong>80 more focus minutes</strong> to reach #2. Your private task names stay hidden — only completed focus totals are shown.</p>
+
+            <div class="pills">
+              <span class="pill">#3 current rank</span>
+              <span class="pill gold">80m to #2</span>
+              <span class="pill">+2 ranks today</span>
+            </div>
+
+            <div class="privacy">🔒 Privacy-safe: task names are never shown on the leaderboard.</div>
+          </div>
+
+          <div class="hero-actions">
+            <button class="btn" id="privacyBtn">Privacy rules</button>
+            <button class="btn primary" id="startFocusBtn">Start Focus</button>
+          </div>
+        </section>
+
+        <section class="summary">
+          <div class="stat focus"><strong>#3</strong><span>Your current rank</span></div>
+          <div class="stat gold"><strong>80m</strong><span>To next rank</span></div>
+          <div class="stat"><strong>14</strong><span>Your sessions</span></div>
+          <div class="stat audio"><strong>Top 15%</strong><span>Weekly pace</span></div>
+          <div class="stat sound"><strong>Brown Noise</strong><span>Your best focus sound</span></div>
+        </section>
+
+        <section class="race">
+          <div>
+            <div class="eyebrow">Your race</div>
+            <h2>Sarah is 80 minutes ahead.</h2>
+            <p>Finish about four more Pomodoros to move from #3 to #2 this week.</p>
+          </div>
+
+          <div class="race-steps">
+            <div class="race-step"><span>Target user</span><strong>Sarah · #2</strong></div>
+            <div class="race-step"><span>Gap to close</span><strong class="hot">80m</strong></div>
+            <div class="race-step"><span>Suggested effort</span><strong>4 Pomodoros</strong></div>
+          </div>
+        </section>
+
+        <section class="layout">
+          <div class="main-col">
+            <section class="card">
+              <div class="card-head">
+                <div>
+                  <div class="eyebrow">Top Focusers</div>
+                  <h2>This week’s podium</h2>
+                </div>
+                <button class="btn" id="shareRankBtn">Share rank</button>
+              </div>
+
+              <div class="podium" id="podium"></div>
+            </section>
+
+            <section class="card" style="margin-top:18px">
+              <div class="card-head">
+                <div>
+                  <div class="eyebrow">Rankings</div>
+                  <h2>Leaderboard table</h2>
+                </div>
+              </div>
+
+              <div class="privacy-strip">
+                🔒 Ranked by completed focus minutes. Task titles stay private. Top Sound is aggregate usage only.
+                Rank movement is shown beside each name.
+              </div>
+
+              <div class="toolbar">
+                <div class="filters">
+                  <button class="filter active" data-period="week">Weekly</button>
+                  <button class="filter" data-period="month">Monthly</button>
+                  <button class="filter" data-period="all">All time</button>
+                </div>
+
+                <div class="tools">
+                  <input class="search" id="searchInput" placeholder="Search names..."/>
+                  <select class="select" id="metricSelect">
+                    <option value="focusMinutes">Focus time</option>
+                    <option value="sessions">Sessions</option>
+                    <option value="streak">Streak</option>
+                  </select>
+                  <button class="btn" id="clearBtn">Clear</button>
+                </div>
+              </div>
+
+              <div class="empty" id="emptyState">
+                <h3>No users found</h3>
+                <p>Try another search or period.</p>
+              </div>
+
+              <div class="leaderboard" id="leaderboardList"></div>
+            </section>
+          </div>
+
+          <aside class="side">
+            <section class="card rank-card">
+              <div class="eyebrow">Next move</div>
+              <h3>4 Pomodoros to #2</h3>
+              <p>Sarah is 80 minutes ahead. Complete focused sessions today to close the gap.</p>
+
+              <div class="progress-wrap">
+                <div class="progress-label">
+                  <span>Progress to next rank</span>
+                  <strong>68%</strong>
+                </div>
+                <div class="progress"><span></span></div>
+              </div>
+            </section>
+
+            <section class="card insight">
+              <div class="eyebrow">Frequency insight</div>
+              <h3>Your best sound</h3>
+              <p><strong>Brown Noise</strong> appears in your longest completed sessions this week. Sound is shown as an aggregate pattern only, not as private task/session detail.</p>
+              <button class="btn" style="width:100%;margin-top:14px" id="howItWorksBtn">How scoring works</button>
+            </section>
+
+            <section class="card popular-card">
+              <div class="eyebrow">Popular Sound</div>
+              <h3>Top sounds this week</h3>
+
+              <div class="popular-list">
+                <div class="popular-item">
+                  <div class="popular-icon">≈</div>
+                  <div>
+                    <strong>Brown Noise</strong>
+                    <span>Used in 42% of completed focus time</span>
+                  </div>
+                  <div class="popular-value">#1</div>
+                </div>
+
+                <div class="popular-item">
+                  <div class="popular-icon">∿</div>
+                  <div>
+                    <strong>432 Hz</strong>
+                    <span>Popular for long deep work sessions</span>
+                  </div>
+                  <div class="popular-value">#2</div>
+                </div>
+
+                <div class="popular-item">
+                  <div class="popular-icon">◐</div>
+                  <div>
+                    <strong>Pink Noise</strong>
+                    <span>Often used for writing and review</span>
+                  </div>
+                  <div class="popular-value">#3</div>
+                </div>
+              </div>
+
+              <p class="mini-note">Sound rankings are aggregate patterns only. They do not affect leaderboard score.</p>
+            </section>
+
+            <section class="card popular-card">
+              <div class="eyebrow">Popular Pomodoro</div>
+              <h3>Most used focus lengths</h3>
+
+              <div class="popular-list">
+                <div class="popular-item">
+                  <div class="popular-icon focus">25</div>
+                  <div>
+                    <strong>25 min Pomodoro</strong>
+                    <span>Most completed session length</span>
+                  </div>
+                  <div class="popular-value focus">58%</div>
+                </div>
+
+                <div class="popular-item">
+                  <div class="popular-icon focus">50</div>
+                  <div>
+                    <strong>50 min Deep Work</strong>
+                    <span>Best for top 10% focusers</span>
+                  </div>
+                  <div class="popular-value focus">27%</div>
+                </div>
+
+                <div class="popular-item">
+                  <div class="popular-icon focus">90</div>
+                  <div>
+                    <strong>90 min Long Flow</strong>
+                    <span>Less common, highest average output</span>
+                  </div>
+                  <div class="popular-value focus">9%</div>
+                </div>
+              </div>
+
+              <p class="mini-note">This helps users discover which session lengths the community actually completes.</p>
+            </section>
+
+
+          </aside>
+        </section>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="toast" id="toast">Done</div>
+
+<script>
+const users = {
+  week: [
+    {rank:1,name:'Alex',handle:'@deepworkalex',focusMinutes:765,sessions:24,streak:8,change:'+1',you:false},
+    {rank:2,name:'Sarah',handle:'@sarahfocus',focusMinutes:560,sessions:18,streak:5,change:'same',you:false},
+    {rank:3,name:'You',handle:'@you',focusMinutes:440,sessions:14,streak:3,change:'+2',you:true},
+    {rank:4,name:'Mike',handle:'@mikeflow',focusMinutes:375,sessions:11,streak:2,change:'-1',you:false},
+    {rank:5,name:'Emma',handle:'@emmadeep',focusMinutes:340,sessions:10,streak:4,change:'same',you:false},
+    {rank:6,name:'Nadia',handle:'@nadiawrites',focusMinutes:290,sessions:9,streak:2,change:'+3',you:false}
+  ],
+  month: [
+    {rank:1,name:'Sarah',handle:'@sarahfocus',focusMinutes:2380,sessions:76,streak:11,change:'+2',you:false},
+    {rank:2,name:'Alex',handle:'@deepworkalex',focusMinutes:2240,sessions:70,streak:8,change:'-1',you:false},
+    {rank:3,name:'Emma',handle:'@emmadeep',focusMinutes:1990,sessions:61,streak:7,change:'+1',you:false},
+    {rank:4,name:'You',handle:'@you',focusMinutes:1740,sessions:54,streak:3,change:'same',you:true},
+    {rank:5,name:'Nadia',handle:'@nadiawrites',focusMinutes:1425,sessions:43,streak:2,change:'+1',you:false}
+  ],
+  all: [
+    {rank:1,name:'Alex',handle:'@deepworkalex',focusMinutes:18540,sessions:620,streak:8,change:'same',you:false},
+    {rank:2,name:'Sarah',handle:'@sarahfocus',focusMinutes:17200,sessions:588,streak:11,change:'+1',you:false},
+    {rank:3,name:'Emma',handle:'@emmadeep',focusMinutes:15110,sessions:502,streak:7,change:'-1',you:false},
+    {rank:4,name:'You',handle:'@you',focusMinutes:13240,sessions:430,streak:3,change:'+2',you:true},
+    {rank:5,name:'Mike',handle:'@mikeflow',focusMinutes:11005,sessions:360,streak:2,change:'same',you:false}
+  ]
+};
+
+let period = 'week';
+let metric = 'focusMinutes';
+let query = '';
+
+const $ = id => document.getElementById(id);
+
+function toast(text){
+  const el = $('toast');
+  el.textContent = text;
+  el.classList.add('show');
+  clearTimeout(toast.timer);
+  toast.timer = setTimeout(() => el.classList.remove('show'), 1400);
+}
+
+function fm(minutes){
+  if(minutes < 60) return `${minutes}m`;
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  return m ? `${h}h ${m}m` : `${h}h`;
+}
+
+function initials(name){
+  return name === 'You' ? 'Y' : name.slice(0,1).toUpperCase();
+}
+
+function userSound(user){
+  const map = {
+    Alex:'Brown Noise',
+    Sarah:'432 Hz',
+    You:'Brown Noise',
+    Mike:'No Audio',
+    Emma:'Pink Noise',
+    Nadia:'528 Hz'
+  };
+  return map[user.name] || 'Brown Noise';
+}
+
+function shiftIcon(change){
+  if(!change) return '';
+  if(change.startsWith('+')){
+    return `<span class="shift up" title="Rank up ${change}">▲</span>`;
+  }
+  return '';
+}
+
+function sortedUsers(){
+  return [...(users[period] || users.week)]
+    .filter(user => `${user.name} ${user.handle}`.toLowerCase().includes(query.toLowerCase()))
+    .sort((a,b) => b[metric] - a[metric]);
+}
+
+function renderPodium(){
+  const top = [...(users[period] || users.week)].sort((a,b) => a.rank - b.rank).slice(0,3);
+  const order = [top[1], top[0], top[2]].filter(Boolean);
+
+  $('podium').innerHTML = order.map(user => `
+    <div class="podium-card ${user.rank === 1 ? 'first' : user.rank === 2 ? 'second' : 'third'}">
+      <div class="medal">${user.rank === 1 ? '🥇' : user.rank === 2 ? '🥈' : '🥉'}</div>
+      <div class="avatar">${initials(user.name)}</div>
+      <h3>${user.name}</h3>
+      <p>${user.handle}</p>
+      <div class="podium-score">
+        <span class="podium-focus">${fm(user.focusMinutes)}</span>
+        <span class="podium-meta">${user.sessions} completed sessions</span>
+        <span class="sound-pill" style="margin-top:10px">${userSound(user)}</span>
+      </div>
+      ${user.you ? '<span class="you-tag">You</span>' : ''}
+    </div>
+  `).join('');
+}
+
+function renderTable(){
+  const list = sortedUsers();
+  $('emptyState').style.display = list.length ? 'none' : 'block';
+
+  $('leaderboardList').innerHTML = `
+    <div class="lb-row header">
+      <div>Rank</div>
+      <div>Member</div>
+      <div>Focus</div>
+      <div>Top Sound</div>
+      <div>Sessions</div>
+      <div>Streak</div>
+    </div>
+  ` + list.map((user, index) => `
+    <div class="lb-row ${user.you ? 'you' : ''}" data-name="${user.name}">
+      <div class="lb-rank">#${index + 1}</div>
+
+      <div class="lb-member">
+        <div class="mini-avatar">${initials(user.name)}</div>
+        <div class="member-meta">
+          <div class="name-line">
+            <span class="lb-name ${user.you ? 'you' : ''}">${user.name}</span>
+            ${shiftIcon(user.change)}
+          </div>
+          <span class="handle">${user.handle}${user.you ? ' · you' : ''}</span>
+        </div>
+      </div>
+
+      <div class="score">${fm(user.focusMinutes)}</div>
+      <div><span class="sound-pill">${userSound(user)}</span></div>
+      <div class="muted">${user.sessions}</div>
+      <div class="muted">${user.streak}d</div>
+    </div>
+  `).join('');
+
+  document.querySelectorAll('.lb-row[data-name]').forEach(row => {
+    row.onclick = () => toast(`Open profile: ${row.dataset.name}`);
+  });
+}
+
+function render(){
+  renderPodium();
+  renderTable();
+}
+
+document.querySelectorAll('[data-period]').forEach(button => {
+  button.onclick = () => {
+    document.querySelectorAll('[data-period]').forEach(x => x.classList.remove('active'));
+    button.classList.add('active');
+    period = button.dataset.period;
+    render();
+    toast(`Period: ${button.textContent}`);
+  };
+});
+
+$('searchInput').oninput = event => {
+  query = event.target.value;
+  renderTable();
+};
+
+$('metricSelect').onchange = event => {
+  metric = event.target.value;
+  renderTable();
+  toast(`View metric: ${event.target.options[event.target.selectedIndex].text}`);
+};
+
+$('clearBtn').onclick = () => {
+  query = '';
+  metric = 'focusMinutes';
+  $('searchInput').value = '';
+  $('metricSelect').value = 'focusMinutes';
+  render();
+  toast('Filters cleared');
+};
+
+$('shareRankBtn').onclick = () => toast('Rank copied for sharing');
+$('privacyBtn').onclick = () => toast('Only aggregate stats are public');
+$('startFocusBtn').onclick = () => toast('Mock navigation: /app focus page');
+$('howItWorksBtn').onclick = () => toast('Score = completed focus minutes; sound is insight only');
+$('mobileMenuBtn')?.addEventListener('click', () => toast('Mock mobile menu opened'));
+
+document.querySelectorAll('[data-nav]').forEach(button => {
+  button.onclick = () => toast(`Mock navigation: ${button.dataset.nav}`);
+});
+
+render();
+</script>
+
+<script>
+(function(){
+  document.addEventListener('click', function(event){
+    var button = event.target.closest('[data-nav]');
+    if (!button) return;
+    var page = button.getAttribute('data-nav');
+    if (!page) return;
+    if (window.parent && window.parent !== window) {
+      event.preventDefault();
+      event.stopPropagation();
+      window.parent.postMessage({ type: 'focusfreq:navigate', page: page }, '*');
+    }
+  }, true);
+})();
+</script>
+
+</body>
+</html>

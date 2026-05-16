@@ -56,6 +56,8 @@ const MODE_LABELS: Record<SessionType, { label: string; icon: React.ReactNode }>
   },
 };
 
+import styles from './TimerPresets.module.css';
+
 interface ModeTabsProps {
   currentMode: SessionType;
   onModeChange: (mode: SessionType) => void;
@@ -68,11 +70,17 @@ export function ModeTabs({
   disabled = false,
 }: ModeTabsProps) {
   return (
-    <div className="inline-flex bg-white p-1 rounded-full border border-surface-200 mb-2">
+    <div className={styles.modeTabs}>
       {(Object.keys(MODE_LABELS) as SessionType[]).map((mode) => {
         const isSelected = currentMode === mode;
         const isModeBreak = mode !== 'focus';
         const modeData = MODE_LABELS[mode];
+        
+        let btnClass = styles.modeButton;
+        if (isSelected) {
+          btnClass += isModeBreak ? ` ${styles.modeButtonActiveBreak}` : ` ${styles.modeButtonActiveFocus}`;
+        }
+        
         return (
           <button
             key={mode}
@@ -80,15 +88,8 @@ export function ModeTabs({
             disabled={disabled}
             aria-pressed={isSelected}
             aria-label={`${modeData.label} mode`}
-            className={`flex items-center justify-center gap-1.5 px-4 py-2 rounded-full text-[13px] font-semibold transition-all duration-200 min-h-[36px] ${
-              isSelected
-                ? isModeBreak
-                  ? 'bg-break-soft text-break border border-break-border/60'
-                  : 'bg-focus-soft text-focus border border-focus-border/60'
-                : 'text-text-secondary hover:text-text-primary hover:bg-surface-50 border border-transparent'
-            } disabled:cursor-not-allowed disabled:opacity-40`}
+            className={btnClass}
           >
-            {modeData.icon}
             {modeData.label}
           </button>
         );
