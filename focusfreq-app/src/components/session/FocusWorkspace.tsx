@@ -156,6 +156,11 @@ function FocusWorkspaceInner() {
       ? `${session.binauralLeftHz}/${session.binauralRightHz} Hz binaural`
       : null;
 
+    // Snapshot task title for Supabase record
+    const taskTitleSnapshot = session.taskId
+      ? tasks.find(t => t.id === session.taskId)?.title ?? null
+      : null;
+
     writeSessionToSupabase({
       plannedMinutes: session.plannedDurationMinutes,
       actualMinutes: session.actualDurationMinutes,
@@ -164,14 +169,20 @@ function FocusWorkspaceInner() {
       audioDetail,
       startedAt: new Date(session.startedAt),
       endedAt: new Date(session.endedAt),
-      isBreak: session.isBreak,
+      sessionType: session.sessionType,
+      taskTitle: taskTitleSnapshot,
     });
-  }, [refreshTasks, cycle]);
+  }, [refreshTasks, cycle, tasks]);
 
   const handleAbandon = useCallback((session: FocusSession) => {
     audioEngine.stop();
     cycle.cancelAutoStart();
     setLastSession(session);
+
+    // Snapshot task title for Supabase record
+    const taskTitleSnapshot = session.taskId
+      ? tasks.find(t => t.id === session.taskId)?.title ?? null
+      : null;
 
     writeSessionToSupabase({
       plannedMinutes: session.plannedDurationMinutes,
@@ -181,9 +192,10 @@ function FocusWorkspaceInner() {
       audioDetail: null,
       startedAt: new Date(session.startedAt),
       endedAt: new Date(session.endedAt),
-      isBreak: session.isBreak,
+      sessionType: session.sessionType,
+      taskTitle: taskTitleSnapshot,
     });
-  }, [cycle]);
+  }, [cycle, tasks]);
 
   const timer = useTimer({
     onComplete: handleComplete,
@@ -360,12 +372,7 @@ function FocusWorkspaceInner() {
             )}
           </div>
 
-          {/* Break mode indicator */}
-          {isBreak && !isTimerActive && (
-            <div className="rounded-xl bg-break-soft border border-break-border px-4 py-2 text-sm font-medium text-break animate-fade-in">
-              {cycle.currentMode === 'short_break' ? '☕ Short Break' : '🌿 Long Break'}
-            </div>
-          )}
+
           
           {/* Pomodoro Tracker */}
           {cycle.pomodorosCompleted > 0 && !isTimerActive && (

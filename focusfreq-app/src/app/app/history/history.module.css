@@ -65,6 +65,15 @@
   position: relative;
 }
 
+.btnIcon {
+  width: 44px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  letter-spacing: .06em;
+}
+
 .moreMenu {
   position: absolute;
   right: 0;
@@ -97,6 +106,24 @@
 
 .menuItem:hover {
   background: var(--color-surface-100);
+}
+
+.toast {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  display: none;
+  background: #111827;
+  color: #fff;
+  border-radius: 16px;
+  padding: 13px 16px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, .18);
+  font-weight: 850;
+  z-index: 100;
+}
+
+.toastShow {
+  display: block;
 }
 
 .summaryGrid {
@@ -660,6 +687,10 @@
 @media(max-width:640px) {
   .hero { display: block; }
   .heroActions { margin-top: 16px; }
+  .btn { flex: 1; }
+  .btnIcon { flex: none; width: 44px; }
+  .moreWrap { width: 100%; }
+  .moreMenu { left: 0; right: auto; width: 100%; }
   .summaryGrid { grid-template-columns: 1fr 1fr; gap: 10px; }
   .statCard { padding: 15px; border-radius: 20px; }
   .statCard strong { font-size: 23px; }

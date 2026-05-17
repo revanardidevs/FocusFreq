@@ -8,11 +8,13 @@ interface SessionData {
   audioDetail: string | null;
   startedAt: Date;
   endedAt: Date;
-  isBreak?: boolean;
+  sessionType: 'focus' | 'short_break' | 'long_break';
+  taskTitle?: string | null;
 }
 
 /**
  * Write a completed/abandoned session to Supabase.
+ * Records both focus and break sessions (daily_stats trigger only counts focus).
  * Silently skipped if Supabase is not configured.
  * Never throws — errors are logged to console.
  */
@@ -21,11 +23,6 @@ export async function writeSessionToSupabase(session: SessionData): Promise<bool
     if (typeof window !== 'undefined') {
       console.warn('[FocusFreq] Supabase not configured, skipping session write.');
     }
-    return false;
-  }
-
-  if (session.isBreak) {
-    console.log('[FocusFreq] Skipping break session write to Supabase.');
     return false;
   }
 
@@ -58,6 +55,8 @@ export async function writeSessionToSupabase(session: SessionData): Promise<bool
       audio_detail: session.audioDetail,
       started_at: session.startedAt.toISOString(),
       ended_at: session.endedAt.toISOString(),
+      session_type: session.sessionType,
+      task_title: session.taskTitle || null,
     });
 
     if (error) {
@@ -72,11 +71,20 @@ export async function writeSessionToSupabase(session: SessionData): Promise<bool
   }
 }
 
+/** Typed leaderboard entry matching the get_weekly_leaderboard RPC. */
+export interface LeaderboardEntry {
+  rank: number;
+  user_id: string;
+  display_name: string;
+  focus_minutes: number;
+  completed_sessions: number;
+}
+
 /**
  * Fetch leaderboard data via the safe RPC.
  * Returns empty array if Supabase is not configured.
  */
-export async function fetchWeeklyLeaderboard(limit: number = 50) {
+export async function fetchWeeklyLeaderboard(limit: number = 50): Promise<LeaderboardEntry[]> {
   if (!isSupabaseConfigured || !supabase) {
     return [];
   }
@@ -91,9 +99,79 @@ export async function fetchWeeklyLeaderboard(limit: number = 50) {
       return [];
     }
 
-    return data || [];
+    return (data as LeaderboardEntry[]) || [];
   } catch (err) {
     console.warn('[FocusFreq] Leaderboard fetch error:', err);
+    return [];
+  }
+}
+
+/**
+ * Get the current authenticated user's ID.
+ * Returns null if not authenticated or Supabase not configured.
+ */
+export async function getCurrentUserId(): Promise<string | null> {
+  if (!isSupabaseConfigured || !supabase) return null;
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    return user?.id || null;
+  } catch {
+    return null;
+  }
+}
+
+/* ── D4: Community aggregate types ────────────────────── */
+
+/** Aggregate-only: sound label + session count. No user-level data. */
+export interface PopularSoundEntry {
+  sound_label: string;
+  sessions_count: number;
+}
+
+/** Aggregate-only: planned duration + session count. No user-level data. */
+export interface PopularPomodoroEntry {
+  duration_minutes: number;
+  sessions_count: number;
+}
+
+/**
+ * Fetch the most popular sounds this week (aggregate only).
+ * Uses SECURITY DEFINER RPC — returns no user_id, task_title, or timestamps.
+ */
+export async function fetchPopularSounds(limit: number = 5): Promise<PopularSoundEntry[]> {
+  if (!isSupabaseConfigured || !supabase) return [];
+  try {
+    const { data, error } = await supabase.rpc('get_weekly_popular_sounds', {
+      limit_count: Math.min(limit, 10),
+    });
+    if (error) {
+      console.warn('[FocusFreq] Popular sounds fetch failed:', error.message);
+      return [];
+    }
+    return (data as PopularSoundEntry[]) || [];
+  } catch (err) {
+    console.warn('[FocusFreq] Popular sounds fetch error:', err);
+    return [];
+  }
+}
+
+/**
+ * Fetch the most popular pomodoro durations this week (aggregate only).
+ * Uses SECURITY DEFINER RPC — returns no user_id, task_title, or timestamps.
+ */
+export async function fetchPopularPomodoros(limit: number = 5): Promise<PopularPomodoroEntry[]> {
+  if (!isSupabaseConfigured || !supabase) return [];
+  try {
+    const { data, error } = await supabase.rpc('get_weekly_popular_pomodoros', {
+      limit_count: Math.min(limit, 10),
+    });
+    if (error) {
+      console.warn('[FocusFreq] Popular pomodoros fetch failed:', error.message);
+      return [];
+    }
+    return (data as PopularPomodoroEntry[]) || [];
+  } catch (err) {
+    console.warn('[FocusFreq] Popular pomodoros fetch error:', err);
     return [];
   }
 }

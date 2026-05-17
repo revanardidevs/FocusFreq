@@ -55,6 +55,24 @@
   cursor: pointer;
 }
 
+.toast {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  display: none;
+  background: #111827;
+  color: #fff;
+  border-radius: 16px;
+  padding: 13px 16px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, .18);
+  font-weight: 850;
+  z-index: 100;
+}
+
+.toastShow {
+  display: block;
+}
+
 .pills {
   margin-top: 18px;
   display: flex;
@@ -90,7 +108,7 @@
 /* Summary */
 .summary {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 14px;
   margin-bottom: 18px;
 }
@@ -458,7 +476,7 @@
 
 .lbRow {
   display: grid;
-  grid-template-columns: 70px minmax(250px, 1.5fr) 130px 170px 100px 90px;
+  grid-template-columns: 70px minmax(250px, 1.5fr) 130px 100px;
   align-items: center;
   gap: 14px;
   border: 1px solid var(--color-surface-200);
@@ -466,7 +484,7 @@
   border-radius: 20px;
   padding: 16px 18px;
   min-height: 86px;
-  min-width: 860px;
+  min-width: 580px;
 }
 
 .lbRowHeader {
@@ -641,7 +659,7 @@
 .progressFill {
   display: block;
   height: 100%;
-  width: 68%;
+  width: var(--progress, 0%);
   background: linear-gradient(135deg, var(--color-focus), #ff735c);
 }
 
@@ -733,6 +751,50 @@
   line-height: 1.45;
 }
 
+/* ── D4: Aggregate bars ──────────────────────────── */
+.aggregateList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.aggregateItem {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.aggregateHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.aggregateLabel {
+  font-weight: 600;
+  font-size: 13.5px;
+  color: var(--text-primary, #2d2417);
+}
+
+.aggregateCount {
+  font-size: 12px;
+  color: var(--text-muted, #8b7d6b);
+}
+
+.aggregateBar {
+  height: 6px;
+  background: var(--surface-border, rgba(45, 36, 23, 0.06));
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.aggregateBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, #e87c3e, #d96834);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
 @media(max-width:1080px) {
   .layout { grid-template-columns: 1fr; }
   .summary { grid-template-columns: repeat(2, 1fr); }
@@ -753,4 +815,5 @@
   .podium { grid-template-columns: 1fr; }
   .podiumFirst, .podiumSecond, .podiumThird { min-height: auto; }
   .hero h1 { font-size: 36px; }
+  .btn { flex: 1; }
 }
